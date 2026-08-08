@@ -1,23 +1,158 @@
 aid: barogo
 name: Barogo
-description: 'Barogo is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Barogo (바로고) is a South Korean last-mile delivery platform founded in 2014 and headquartered
+  in Gangnam-gu, Seoul. It operates a nationwide two-wheeler dispatch network for food and
+  goods, with rider, merchant and hub-manager apps and a store POS program, and counts
+  McDonald's, Burger King, KFC, Krispy Kreme, Baskin Robbins and Dunkin among its clients. Its
+  developer-facing product is Gorela (고릴라), a delivery-brokerage platform that sits between an
+  "order agency" — a POS, marketplace or commerce platform that takes the customer's order —
+  and the delivery agencies that assign riders. The Gorela API covers fare quoting and
+  serviceability, order intake in fixed-fare and flexible-fare modes, order read/amend/cancel,
+  store mapping, prepaid store balances, delivery-agency status and delivery zones, plus twenty
+  callbacks pushed back to the partner as an order fans out into its child deliveries.
+image: https://www.barogo.com/images/common/logo.png
 url: https://raw.githubusercontent.com/api-evangelist/barogo/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-06'
 modified: '2026-08-06'
 tags:
 - Company
-apis: []
+- Delivery
+- Logistics
+- Last Mile Delivery
+- Food Delivery
+- Courier
+- Fulfillment
+- Orders
+- Webhooks
+- South Korea
+- Transportation
+- Marketplace
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: barogo-gorela-order-agency-api
+  name: Gorela Order Agency API
+  description: >-
+    The Gorela (고릴라) order-agency API. An order agency quotes a delivery, accepts the order
+    into Gorela, and Gorela brokers it out to one or more delivery agencies that dispatch
+    riders. Order and delivery are separate aggregates — one order can fan out into N
+    deliveries, and the order only closes once every child delivery is terminal. Two fare
+    models are offered: 고정 요금 | 의무 수행, where Gorela sets the fare and takes responsibility
+    for completion, and 유연 요금 | 자율 수행, where the partner sets the fare and riders opt in.
+    Each is available address-based (no store setup) or store-based (requires a 1:1 store
+    mapping). Twenty-one REST operations plus twenty callbacks, authenticated with a static
+    API key as an HTTP bearer token.
+  humanURL: https://developer.gorelas.com/api-doc/request
+  baseURL: https://api-interlocker.gorelas.com
+  tags:
+  - Delivery
+  - Orders
+  - Logistics
+  - Last Mile Delivery
+  - Store Mapping
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    name: Gorela Order Agency API — OpenAPI 3.1
+    url: openapi/barogo-gorela-openapi.yml
+  - type: OpenAPI
+    name: Gorela Callback (Webhook) API — OpenAPI 3.1 webhooks
+    url: openapi/barogo-gorela-callbacks-openapi.yml
+  - type: Overlay
+    url: overlays/barogo-gorela-overlay.yaml
+  - type: Examples
+    url: examples/barogo-gorela-examples.yml
+  - type: Documentation
+    url: https://developer.gorelas.com/api-doc/request
+  - type: APIReference
+    url: https://developer.gorelas.com/api-docs-md/index.md
+  - type: Authentication
+    url: authentication/barogo-authentication.yml
 common:
 - type: Website
+  url: https://www.barogo.com/
+- type: DeveloperPortal
+  url: https://developer.gorelas.com/
+- type: Documentation
+  url: https://developer.gorelas.com/api-doc/request
+- type: APIReference
+  url: https://developer.gorelas.com/api-docs-md/index.md
+- type: GettingStarted
+  url: https://developer.gorelas.com/api-docs-md/index.md#연동-가이드
+- type: SignUp
+  url: https://developer.gorelas.com/linkage
+- type: Support
+  url: mailto:tech_poc@barogo.com
+- type: GitHubOrganization
+  url: https://github.com/BarogoDevelopers
+- type: Blog
+  url: https://m.blog.naver.com/PostList.nhn?blogId=barogo_info
+- type: News
+  url: https://www.barogo.com/news
+- type: TermsOfService
+  url: https://www.barogo.com/policy/delivery
+- type: PrivacyPolicy
+  url: https://www.barogo.com/policy/privacy
+- type: LocationBasedServicesTerms
+  url: https://www.barogo.com/policy/locationbased
+- type: Console
+  url: https://admin.gorelas.com
+- type: Authentication
+  url: authentication/barogo-authentication.yml
+- type: Conventions
+  url: conventions/barogo-conventions.yml
+- type: ErrorCatalog
+  url: errors/barogo-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/barogo-lifecycle.yml
+- type: Conformance
+  url: conformance/barogo-conformance.yml
+- type: DataModel
+  url: data-model/barogo-data-model.yml
+- type: Sandbox
+  url: sandbox/barogo-sandbox.yml
+- type: Webhooks
+  url: asyncapi/barogo-gorela-webhooks.yml
+- type: Packages
+  url: packages/barogo-packages.yml
+- type: MCPServer
+  url: mcp/barogo-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/barogo-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/barogo-llms.txt
+- type: WellKnown
+  url: well-known/barogo-well-known.yml
+- type: AgenticAccess
+  url: agentic-access/barogo-agentic-access.yml
+- type: DomainSecurity
+  url: security/barogo-domain-security.yml
+- type: SecondaryMarket
   url: https://www.hiive.com/securities/barogo-stock
+x-enrichment:
+  date: '2026-08-06'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
+x-coverage:
+  state: covered
+  detail: >-
+    The Gorela developer portal is a client-rendered SPA that answers 200 with the same
+    1985-byte shell for every path, including /openapi.json and every /.well-known/ probe — but
+    the complete typed API reference is served as raw markdown under /api-docs-md/ (index.md
+    plus 25 endpoint documents, 600KB), which is fully machine-readable.
+  evidence:
+    - url: https://developer.gorelas.com/api-docs-md/index.md
+      status: 200
+    - url: https://developer.gorelas.com/openapi.json
+      status: 200
+  checked: '2026-08-06'
