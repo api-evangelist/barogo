@@ -1,0 +1,2822 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/
+note: Request/response payload examples published verbatim in Barogo's Gorela developer reference. Extracted per operation;
+  values are the provider's own sample values.
+examples:
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    orderAgencyId: gorela_chicken
+    pickupId: c7b61777-f091-4b2d-b50e-083171e9196d
+    pickupRoadAddress: 서울특별시 강남구 도산대로55길 20 영빌딩 1층
+    pickupJibunAddress: 서울특별시 강남구 청담동 88-5
+    pickupAddressDetail: 1층
+    pickupLocation:
+      latitude: '37.5247834'
+      longitude: '127.0406188'
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    pickupWishAt: 1674716400000
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    hasAlcoholicBeverage: false
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: true
+      deliveryInfo:
+        pickupMinimumAt: 1674717600000
+        pickupExpectedAt: 1674717600000
+        deliveryDistance: 1320
+        delayTime: 10
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: false
+      reason: BAD_WEATHER
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    orderType: FOR_DELIVERY
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyDailyOrderId: '101'
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+    receiverPhone: '01011112222'
+    receiverName: 임꺽정
+    ordererOrderMemo: 맛있게 부탁드립니다.
+    orderChannel: BAEMIN
+    isReservation: false
+    pickupWishAt: 1674720000000
+    hasAlcoholicBeverage: false
+    isUntact: true
+    pickupId: c7b61777-f091-4b2d-b50e-083171e9196d
+    pickupName: 고릴라 치킨 청담점
+    pickupPhone: '021231234'
+    pickupRoadAddress: 서울특별시 강남구 도산대로55길 20 영빌딩 1층
+    pickupJibunAddress: 서울특별시 강남구 청담동 88-5
+    pickupAddressDetail: 1층
+    pickupLocation:
+      latitude: '37.5247834'
+      longitude: '127.0406188'
+    pickupGuide: 사거리 횡단보도 건너서 골목 좌회전
+    pickupEntrancePassword: 123456#
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    dropEntrancePassword: 123456#
+    dropGuide: 세븐일레븐 맞은편 초록지붕집
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        status: CREATED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 28000
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupJibunAddress: 서울특별시 강남구 청담동 88-5
+        pickupRoadAddress: 서울특별시 강남구 도산대로55길 20 영빌딩 1층
+        pickupAddressDetail: 1층
+        pickupLocation:
+          latitude: '37.5247834'
+          longitude: '127.0406188'
+        pickupGuide: 사거리 횡단보도 건너서 골목 좌회전
+        dropJibunAddress: 서울 강남구 논현동 117
+        dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+        dropAddressDetail: 5층 505호
+        dropLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropEntrancePassword: 123456#
+        dropGuide: 세븐일레븐 맞은편 초록지붕집
+        pickupWishAt: 1674719400000
+        isReservation: false
+        dropWishAt: null
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: ACCEPTED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3800
+          deliveryPrice: 3300
+          totalExtraCharge: 500
+          extraCharges:
+          - dataType: FIXED
+            type: WEATHER
+            charge: 500
+          VATPrice: 380
+          deliveryDistance: 1320
+          delayTime: 10
+          pickupExpectedAt: 1674720000000
+          dropExpectedAt: 1674721200000
+          hubPhone: null
+          createdAt: 1674718800123
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (주소 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-1.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: BAD_WEATHER
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    pickupWishAt: 1674716400000
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    paymentCashPrice: 0
+    paymentCardPrice: 0
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: true
+      deliveryInfo:
+        pickupMinimumAt: 1674717600000
+        pickupExpectedAt: 1674717600000
+        deliveryDistance: 1320
+        delayTime: 10
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+- operationId: checkDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-possible
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: false
+      reason: BAD_WEATHER
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    orderType: FOR_DELIVERY
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyDailyOrderId: '101'
+    orderAgencyStoreId: gorela_chicken_store_1
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    paymentCashPrice: 0
+    paymentCardPrice: 0
+    taxFreePayPrice: 0
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+    receiverPhone: '01011112222'
+    receiverName: 임꺽정
+    storeOrderMemo: 안전 배달 부탁드립니다.
+    ordererOrderMemo: 맛있게 부탁드립니다.
+    orderChannel: BAEMIN
+    isReservation: false
+    pickupWishAt: 1674720000000
+    isUntact: true
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    dropEntrancePassword: 123456#
+    dropGuide: 세븐일레븐 맞은편 초록지붕집
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        orderAgencyStoreId: gorela_chicken_store_1
+        storeId: 1220
+        status: CREATED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 8000
+        paymentCashPrice: 10000
+        paymentCardPrice: 10000
+        taxFreePayPrice: 0
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        storeOrderMemo: 안전 배달 부탁드립니다.
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+        pickupAddressDetail: 1층 101호
+        pickupLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropJibunAddress: 서울 강남구 논현동 117
+        dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+        dropAddressDetail: 5층 505호
+        dropLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropEntrancePassword: 123456#
+        dropGuide: 세븐일레븐 맞은편 초록지붕집
+        pickupWishAt: 1674719400000
+        isReservation: false
+        dropWishAt: null
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: ACCEPTED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3800
+          deliveryPrice: 3300
+          totalExtraCharge: 500
+          extraCharges:
+          - dataType: FIXED
+            type: WEATHER
+            charge: 500
+          VATPrice: 380
+          deliveryDistance: 1320
+          delayTime: 10
+          pickupExpectedAt: 1674720000000
+          dropExpectedAt: 1674721200000
+          hubPhone: null
+          createdAt: 1674718800123
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 고정 요금 | 의무 수행 (상점 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-2.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: BAD_WEATHER
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    orderAgencyId: gorela_chicken
+    pickupId: c7b61777-f091-4b2d-b50e-083171e9196d
+    pickupRoadAddress: 서울특별시 강남구 도산대로55길 20 영빌딩 1층
+    pickupJibunAddress: 서울특별시 강남구 청담동 88-5
+    pickupAddressDetail: 1층
+    pickupLocation:
+      latitude: '37.5247834'
+      longitude: '127.0406188'
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    pickupWishAt: 1674716400000
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: true
+      deliveryInfo:
+        pickupMinimumAt: 1674717600000
+        pickupExpectedAt: 1674717600000
+        deliveryDistance: 1320
+        minimumDeliveryPrice: 2500
+        recommendDeliveryPrice: 4000
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: false
+      reason: BAD_WEATHER
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    orderType: FOR_DELIVERY
+    requestDeliveryPrice: 3000
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyDailyOrderId: '101'
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+    receiverPhone: '01011112222'
+    receiverName: 임꺽정
+    ordererOrderMemo: 맛있게 부탁드립니다.
+    orderChannel: BAEMIN
+    pickupWishAt: 1674720000000
+    hasAlcoholicBeverage: false
+    isUntact: true
+    pickupId: c7b61777-f091-4b2d-b50e-083171e9196d
+    pickupName: 고릴라 치킨 청담점
+    pickupPhone: '021231234'
+    pickupRoadAddress: 서울 강남구 언주로134길 32
+    pickupJibunAddress: 서울 강남구 논현동 117
+    pickupAddressDetail: 1층
+    pickupLocation:
+      latitude: '37.5168692'
+      longitude: '127.0383158'
+    pickupGuide: 사거리 횡단보도 건너서 골목 좌회전
+    pickupEntrancePassword: 123456#
+    dropRoadAddress: 서울 강남구 학동로43길 17 논현2동주민센터
+    dropJibunAddress: 서울 강남구 논현동 114-24
+    dropAddressDetail: 1004호
+    dropEntrancePassword: 123456#
+    dropGuide: 세븐일레븐 맞은편 초록지붕집
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        status: CREATED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 28000
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupRoadAddress: 서울 강남구 언주로134길 32
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupAddressDetail: 1층
+        pickupLocation:
+          latitude: '37.5168692'
+          longitude: '127.0383158'
+        pickupGuide: 사거리 횡단보도 건너서 골목 좌회전
+        pickupEntrancePassword: 123456#
+        dropRoadAddress: 서울 강남구 학동로43길 17 논현2동주민센터
+        dropJibunAddress: 서울 강남구 논현동 114-24
+        dropAddressDetail: 1004호
+        dropLocation:
+          latitude: '37.5172918'
+          longitude: '127.0372351'
+        dropEntrancePassword: 123456#
+        dropGuide: 세븐일레븐 맞은편 초록지붕집
+        pickupWishAt: 1674719400000
+        isReservation: false
+        dropWishAt: null
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: ACCEPTED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3000
+          deliveryPrice: 3000
+          totalExtraCharge: 0
+          extraCharges: []
+          VATPrice: 300
+          deliveryDistance: 1320
+          pickupExpectedAt: 1674720000000
+          dropExpectedAt: 1674721200000
+          hubPhone: null
+          createdAt: 1674718800123
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (주소 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-3.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: BAD_WEATHER
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropAddressDetail: 5층 505호
+    pickupWishAt: 1674716400000
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: true
+      deliveryInfo:
+        pickupMinimumAt: 1674717600000
+        pickupExpectedAt: 1674717600000
+        deliveryDistance: 1320
+        minimumDeliveryPrice: 2500
+        recommendDeliveryPrice: 4000
+- operationId: checkFlexibleDeliveryPossible
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/delivery-possible
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    statusCode: 200
+    data:
+      isPossible: false
+      reason: BAD_WEATHER
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    orderType: FOR_DELIVERY
+    requestDeliveryPrice: 3000
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyDailyOrderId: '101'
+    orderAgencyStoreId: gorela_chicken_store_1
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    paymentCardPrice: 0
+    taxFreePayPrice: 0
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+    receiverPhone: '01011112222'
+    receiverName: 임꺽정
+    storeOrderMemo: 안전 배달 부탁드립니다.
+    ordererOrderMemo: 맛있게 부탁드립니다.
+    orderChannel: BAEMIN
+    pickupWishAt: 1674720000000
+    isUntact: true
+    dropRoadAddress: 서울 강남구 학동로43길 17 논현2동주민센터
+    dropJibunAddress: 서울 강남구 논현동 114-24
+    dropAddressDetail: 1004호
+    dropEntrancePassword: 123456#
+    dropGuide: 세븐일레븐 맞은편 초록지붕집
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        orderAgencyStoreId: gorela_chicken_store_1
+        storeId: 1220
+        status: CREATED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 28000
+        paymentCardPrice: 0
+        taxFreePayPrice: 0
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        storeOrderMemo: 안전 배달 부탁드립니다.
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupRoadAddress: 서울 강남구 언주로134길 32
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupAddressDetail: 1층
+        pickupLocation:
+          latitude: '37.5168692'
+          longitude: '127.0383158'
+        dropRoadAddress: 서울 강남구 학동로43길 17 논현2동주민센터
+        dropJibunAddress: 서울 강남구 논현동 114-24
+        dropAddressDetail: 1004호
+        dropLocation:
+          latitude: '37.5172918'
+          longitude: '127.0372351'
+        dropEntrancePassword: 123456#
+        dropGuide: 세븐일레븐 맞은편 초록지붕집
+        pickupWishAt: 1674719400000
+        isReservation: false
+        dropWishAt: null
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: ACCEPTED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3000
+          deliveryPrice: 3000
+          totalExtraCharge: 0
+          extraCharges: []
+          VATPrice: 300
+          deliveryDistance: 1320
+          pickupExpectedAt: 1674720000000
+          dropExpectedAt: 1674721200000
+          hubPhone: null
+          createdAt: 1674718800123
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: createFlexibleOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders
+  method: POST
+  variant: 유연 요금 | 자율 수행 (상점 기반)
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-4.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: BAD_WEATHER
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 주문 접수 - ACCEPTED_ORDER
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-5.md
+  value:
+    orderType: ACCEPTED_ORDER
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyDailyOrderId: '101'
+    orderAgencyStoreId: gorela_chicken_store_1
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 8000
+    paymentCashPrice: 10000
+    paymentCardPrice: 10000
+    taxFreePayPrice: 0
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+    receiverPhone: '01011112222'
+    receiverName: 임꺽정
+    storeOrderMemo: 안전 배달 부탁드립니다.
+    ordererOrderMemo: 맛있게 부탁드립니다.
+    orderChannel: BAEMIN
+    isUntact: true
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropAddressDetail: 5층 505호
+    dropEntrancePassword: 123456#
+    dropGuide: 세븐일레븐 맞은편 초록지붕집
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 주문 접수 - ACCEPTED_ORDER
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-5.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: ACCEPTED_ORDER
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        orderAgencyStoreId: gorela_chicken_store_1
+        storeId: 1220
+        status: ACCEPTED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 8000
+        paymentCashPrice: 10000
+        paymentCardPrice: 10000
+        taxFreePayPrice: 0
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        storeOrderMemo: 안전 배달 부탁드립니다.
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+        pickupAddressDetail: 1층 101호
+        pickupLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropJibunAddress: 서울 강남구 논현동 117
+        dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+        dropAddressDetail: 5층 505호
+        dropLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropEntrancePassword: 123456#
+        dropGuide: 세븐일레븐 맞은편 초록지붕집
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        deliveries: []
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: createOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: POST
+  variant: 주문 접수 - ACCEPTED_ORDER
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-5.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: INVALID_ADDRESS
+- operationId: listOrders
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders
+  method: GET
+  variant: 주문 조회
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-6.md
+  value:
+    statusCode: 200
+    data:
+    - orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: FINISHED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 8000
+      paymentCashPrice: 10000
+      paymentCardPrice: 10000
+      taxFreePayPrice: 0
+      receiverPhone: '01011112222'
+      receiverName: 임꺽정
+      storeOrderMemo: 안전 배달 부탁드립니다.
+      ordererOrderMemo: 맛있게 부탁드립니다.
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 5층 505호
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674719400000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      - orderId: 220126164024940
+        status: FINISHED
+        createdAt: 1674720334897
+        changedAt: 1674720334897
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: DROP_FINISHED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720000000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: 01099999999
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        - status: ALLOCATED
+          createdAt: 1674718815897
+          changedAt: 1674718816897
+        - status: PICKUP_FINISHED
+          createdAt: 1674719470897
+          changedAt: 1674719467897
+        - status: DROP_FINISHED
+          createdAt: 1674720333897
+          changedAt: 1674720331897
+        payments:
+        - paymentId: 1234522
+          paymentMethod: CARD
+          cardCompany: KB국민카드
+          cardNumber: 1234********5678
+          vanCompany: ABC-VAN
+          approvalNumber: '1234512133'
+          approvalAt: 1674720330897
+          instalment: 0
+          charge: 10000
+          isCanceled: false
+          canceledAt: null
+          cancelReason: null
+          deliveryAgencyId: barogo
+        - paymentId: 1234523
+          paymentMethod: CASH
+          cardCompany: null
+          cardNumber: null
+          vanCompany: ABC-VAN
+          approvalNumber: '1234512137'
+          approvalAt: 1674720334223
+          instalment: 0
+          charge: 10000
+          isCanceled: false
+          canceledAt: null
+          cancelReason: null
+          deliveryAgencyId: barogo
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+    _meta:
+      limit: 50
+      offset: 0
+      count: 1
+      totalCount: 1
+- operationId: getOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}
+  method: GET
+  variant: 주문 조회
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-6.md
+  value:
+    statusCode: 200
+    data:
+      orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: FINISHED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 8000
+      paymentCashPrice: 10000
+      paymentCardPrice: 10000
+      taxFreePayPrice: 0
+      receiverPhone: '01011112222'
+      receiverName: 임꺽정
+      storeOrderMemo: 안전 배달 부탁드립니다.
+      ordererOrderMemo: 맛있게 부탁드립니다.
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 5층 505호
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674719400000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      - orderId: 220126164024940
+        status: FINISHED
+        createdAt: 1674720334897
+        changedAt: 1674720334897
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: DROP_FINISHED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720000000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: 01099999999
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        - status: ALLOCATED
+          createdAt: 1674718815897
+          changedAt: 1674718816897
+        - status: PICKUP_FINISHED
+          createdAt: 1674719470897
+          changedAt: 1674719467897
+        - status: DROP_FINISHED
+          createdAt: 1674720333897
+          changedAt: 1674720331897
+        payments:
+        - paymentId: 1234522
+          paymentMethod: CARD
+          cardCompany: KB국민카드
+          cardNumber: 1234********5678
+          vanCompany: ABC-VAN
+          approvalNumber: '1234512133'
+          approvalAt: 1674720330897
+          instalment: 0
+          charge: 10000
+          isCanceled: false
+          canceledAt: null
+          cancelReason: null
+          deliveryAgencyId: barogo
+        - paymentId: 1234523
+          paymentMethod: CASH
+          cardCompany: null
+          cardNumber: null
+          vanCompany: ABC-VAN
+          approvalNumber: '1234512137'
+          approvalAt: 1674720334223
+          instalment: 0
+          charge: 10000
+          isCanceled: false
+          canceledAt: null
+          cancelReason: null
+          deliveryAgencyId: barogo
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+- operationId: cancelOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/status/cancel
+  method: PUT
+  variant: 주문 취소
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-7.md
+  value:
+    time: 1674741278579
+    cancelType: DELAY_DELIVERY
+    cancelReason: 배달 지연
+- operationId: cancelOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/status/cancel
+  method: PUT
+  variant: 주문 취소
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-7.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        orderAgencyStoreId: gorela_chicken_store_1
+        storeId: 1220
+        status: CANCELED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 8000
+        paymentCashPrice: 10000
+        paymentCardPrice: 10000
+        taxFreePayPrice: 0
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        storeOrderMemo: 안전 배달 부탁드립니다.
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+        pickupAddressDetail: 1층 101호
+        pickupLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropJibunAddress: 서울 강남구 논현동 117
+        dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+        dropAddressDetail: 5층 505호
+        dropLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        pickupWishAt: 1674719400000
+        dropWishAt: null
+        isReservation: false
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        cancelType: DELAY_DELIVERY
+        cancelReason: 배달 지연
+        statuses:
+        - orderId: 220126164024940
+          status: CREATED
+          createdAt: 1674718800023
+          changedAt: 1674718800023
+        - orderId: 220126164024940
+          status: CANCELED
+          createdAt: 1674720334897
+          changedAt: 1674720334897
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: CANCELED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3800
+          deliveryPrice: 3300
+          totalExtraCharge: 500
+          extraCharges:
+          - dataType: FIXED
+            type: WEATHER
+            charge: 500
+          VATPrice: 380
+          deliveryDistance: 1320
+          delayTime: 10
+          pickupExpectedAt: 1674720000000
+          hubPhone: '021231234'
+          createdAt: 1674718800123
+          driverPhone: null
+          dropImageUrl: null
+          cancelType: ORDER_AGENCY_CANCELED
+          cancelReason: 주문 제휴사 취소
+          cancelFee: 0
+          statuses:
+          - status: CREATED
+            createdAt: 1674718800123
+            changedAt: 1674718800123
+          - status: ASSIGNED
+            createdAt: 1674718800444
+            changedAt: 1674718800444
+          - status: ACCEPTED
+            createdAt: 1674718800897
+            changedAt: 1674718800897
+          - status: CANCELED
+            createdAt: 1674720333897
+            changedAt: 1674720331897
+          payments: []
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: cancelOrder
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/status/cancel
+  method: PUT
+  variant: 주문 취소
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-7.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: INVALID_STATUS
+- operationId: updateOrderPickupWishAt
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/pickup-wish-at
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    pickupWishAt: 1674720000000
+- operationId: updateOrderPickupWishAt
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/pickup-wish-at
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: ACCEPTED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 8000
+      paymentCashPrice: 10000
+      paymentCardPrice: 10000
+      taxFreePayPrice: 0
+      receiverPhone: '01011112222'
+      receiverName: 임꺽정
+      storeOrderMemo: 안전 배달 부탁드립니다.
+      ordererOrderMemo: 맛있게 부탁드립니다.
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 5층 505호
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674720000000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: ACCEPTED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720300000
+        dropExpectedAt: 1674721500000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: null
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        payments: []
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+- operationId: updateOrderDropInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/drop-info
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    dropJibunAddress: 서울특별시 강남구 논현동 117
+    dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+    dropAddressDetail: 99층
+- operationId: updateOrderDropInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/drop-info
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      order:
+        orderType: FOR_DELIVERY
+        orderId: 220126164024940
+        orderAgencyId: gorela_chicken
+        orderAgencyOrderId: TEST_00000123
+        orderAgencyDailyOrderId: '101'
+        orderAgencyStoreId: gorela_chicken_store_1
+        storeId: 1220
+        status: ACCEPTED
+        totalPayPrice: 30000
+        actualPayPrice: 28000
+        prepaidPrice: 8000
+        paymentCashPrice: 10000
+        paymentCardPrice: 10000
+        taxFreePayPrice: 0
+        receiverPhone: '01011112222'
+        receiverName: 임꺽정
+        storeOrderMemo: 안전 배달 부탁드립니다.
+        ordererOrderMemo: 맛있게 부탁드립니다.
+        pickupJibunAddress: 서울 강남구 논현동 117
+        pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+        pickupAddressDetail: 1층 101호
+        pickupLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        dropJibunAddress: 서울 강남구 논현동 117
+        dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+        dropAddressDetail: 99층
+        dropLocation:
+          latitude: '37.5168301'
+          longitude: '127.0382708'
+        pickupWishAt: 1674720000000
+        dropWishAt: null
+        isReservation: false
+        isUntact: true
+        orderChannel: YOGIYO
+        createdAt: 1674718800000
+        cancelType: null
+        cancelReason: null
+        statuses:
+        - orderId: 220126164024940
+          status: CREATED
+          createdAt: 1674718800023
+          changedAt: 1674718800023
+        deliveries:
+        - orderId: 220126164024940
+          deliveryAgencyId: barogo
+          status: ALLOCATED
+          deliveryType: AGENCY
+          totalDeliveryPrice: 3800
+          deliveryPrice: 3300
+          totalExtraCharge: 500
+          extraCharges:
+          - dataType: FIXED
+            type: WEATHER
+            charge: 500
+          VATPrice: 380
+          deliveryDistance: 1320
+          delayTime: 10
+          pickupExpectedAt: 1674720300000
+          dropExpectedAt: 1674721500000
+          hubPhone: '021231234'
+          createdAt: 1674718800123
+          driverPhone: 01099999999
+          dropImageUrl: null
+          cancelType: null
+          cancelReason: null
+          cancelFee: null
+          statuses:
+          - status: CREATED
+            createdAt: 1674718800123
+            changedAt: 1674718800123
+          - status: ASSIGNED
+            createdAt: 1674718800444
+            changedAt: 1674718800444
+          - status: ACCEPTED
+            createdAt: 1674718800897
+            changedAt: 1674718800897
+          - status: ALLOCATED
+            createdAt: 1674718815897
+            changedAt: 1674718816897
+          payments: []
+        orderProducts:
+        - type: FOOD
+          name: 맛있는 후라이드 치킨
+          totalPrice: 28000
+          unitPrice: 12000
+          quantity: 2
+          options:
+          - name: 소스 추가
+            unitPrice: 1000
+            quantity: 2
+        - type: DELIVERY_TIP
+          name: 배달팁
+          totalPrice: 2000
+          unitPrice: 2000
+          quantity: 1
+- operationId: updateOrderDropInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/drop-info
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: INSUFFICIENT_DEPOSIT
+- operationId: updateOrderPaymentInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/payment-info
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    totalPayPrice: 30000
+    actualPayPrice: 28000
+    prepaidPrice: 28000
+    paymentCashPrice: 0
+    paymentCardPrice: 0
+    taxFreePayPrice: 0
+    orderProducts:
+    - type: FOOD
+      name: 맛있는 후라이드 치킨
+      totalPrice: 28000
+      unitPrice: 12000
+      quantity: 2
+      options:
+      - name: 소스 추가
+        unitPrice: 1000
+        quantity: 2
+    - type: DELIVERY_TIP
+      name: 배달팁
+      totalPrice: 2000
+      unitPrice: 2000
+      quantity: 1
+- operationId: updateOrderPaymentInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/payment-info
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: ACCEPTED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 28000
+      paymentCashPrice: 0
+      paymentCardPrice: 0
+      taxFreePayPrice: 0
+      receiverPhone: '01011112222'
+      receiverName: 임꺽정
+      storeOrderMemo: 안전 배달 부탁드립니다.
+      ordererOrderMemo: 맛있게 부탁드립니다.
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 99층
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674720000000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: ALLOCATED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720300000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: 01099999999
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        - status: ALLOCATED
+          createdAt: 1674718815897
+          changedAt: 1674718816897
+        payments: []
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+- operationId: updateOrderMemoInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/memo-info
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    storeOrderMemo: 나는 메모다
+    ordererOrderMemo: 나는 메모입니다
+- operationId: updateOrderMemoInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/memo-info
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: ACCEPTED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 28000
+      paymentCashPrice: 0
+      paymentCardPrice: 0
+      taxFreePayPrice: 0
+      receiverPhone: '01011112222'
+      receiverName: 임꺽정
+      storeOrderMemo: 나는 메모다
+      ordererOrderMemo: 나는 메모입니다
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 99층
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674720000000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: ALLOCATED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720300000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: 01099999999
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        - status: ALLOCATED
+          createdAt: 1674718815897
+          changedAt: 1674718816897
+        payments: []
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+- operationId: updateOrderPhoneInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/phone-info
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    receiverPhone: '01055556666'
+- operationId: updateOrderPhoneInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/orders/{orderAgencyOrderId}/phone-info
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: Response
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      orderType: FOR_DELIVERY
+      orderId: 220126164024940
+      orderAgencyId: gorela_chicken
+      orderAgencyOrderId: TEST_00000123
+      orderAgencyDailyOrderId: '101'
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 1220
+      status: ACCEPTED
+      totalPayPrice: 30000
+      actualPayPrice: 28000
+      prepaidPrice: 28000
+      paymentCashPrice: 0
+      paymentCardPrice: 0
+      taxFreePayPrice: 0
+      receiverPhone: '01055556666'
+      receiverName: 임꺽정
+      storeOrderMemo: 나는 메모다
+      ordererOrderMemo: 나는 메모입니다
+      pickupJibunAddress: 서울 강남구 논현동 117
+      pickupRoadAddress: 서울특별시 강남구 언주로 134길 32
+      pickupAddressDetail: 1층 101호
+      pickupLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      dropJibunAddress: 서울 강남구 논현동 117
+      dropRoadAddress: 서울특별시 강남구 언주로 134길 32
+      dropAddressDetail: 99층
+      dropLocation:
+        latitude: '37.5168301'
+        longitude: '127.0382708'
+      pickupWishAt: 1674720000000
+      dropWishAt: null
+      isReservation: false
+      isUntact: true
+      orderChannel: YOGIYO
+      createdAt: 1674718800000
+      cancelType: null
+      cancelReason: null
+      statuses:
+      - orderId: 220126164024940
+        status: CREATED
+        createdAt: 1674718800023
+        changedAt: 1674718800023
+      deliveries:
+      - orderId: 220126164024940
+        deliveryAgencyId: barogo
+        status: ALLOCATED
+        deliveryType: AGENCY
+        totalDeliveryPrice: 3800
+        deliveryPrice: 3300
+        totalExtraCharge: 500
+        extraCharges:
+        - dataType: FIXED
+          type: WEATHER
+          charge: 500
+        VATPrice: 380
+        deliveryDistance: 1320
+        delayTime: 10
+        pickupExpectedAt: 1674720300000
+        hubPhone: '021231234'
+        createdAt: 1674718800123
+        driverPhone: 01099999999
+        dropImageUrl: null
+        cancelType: null
+        cancelReason: null
+        cancelFee: null
+        statuses:
+        - status: CREATED
+          createdAt: 1674718800123
+          changedAt: 1674718800123
+        - status: ASSIGNED
+          createdAt: 1674718800444
+          changedAt: 1674718800444
+        - status: ACCEPTED
+          createdAt: 1674718800897
+          changedAt: 1674718800897
+        - status: ALLOCATED
+          createdAt: 1674718815897
+          changedAt: 1674718816897
+        payments: []
+      orderProducts:
+      - type: FOOD
+        name: 맛있는 후라이드 치킨
+        totalPrice: 28000
+        unitPrice: 12000
+        quantity: 2
+        options:
+        - name: 소스 추가
+          unitPrice: 1000
+          quantity: 2
+      - type: DELIVERY_TIP
+        name: 배달팁
+        totalPrice: 2000
+        unitPrice: 2000
+        quantity: 1
+- operationId: updateFlexibleOrderDeliveryPrice
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders/{orderAgencyOrderId}/delivery-price
+  method: PUT
+  variant: 주문 수정
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    requestDeliveryPrice: 5000
+- operationId: updateFlexibleOrderDeliveryPrice
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders/{orderAgencyOrderId}/delivery-price
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+- operationId: updateFlexibleOrderDeliveryPrice
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/flexible/orders/{orderAgencyOrderId}/delivery-price
+  method: PUT
+  variant: 주문 수정
+  kind: response
+  label: 거절
+  source: https://developer.gorelas.com/api-docs-md/request-8.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: false
+      reason: INVALID_DELIVERY_PRICE_ONLY_ALLOW_INCREMENTAL
+- operationId: getStoreDepositInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/deposit-infos
+  method: GET
+  variant: 상점 예치금 조회
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-9.md
+  value:
+    statusCode: 200
+    data:
+    - deliveryAgencyId: barogo
+      deliveryAgencyName: 바로고
+      deposit: 95000
+      bank: KB국민은행
+      accountNumber: 123123123123123
+      depositor: 홍길동
+- operationId: getStoreDepositInfo
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/deposit-infos
+  method: GET
+  variant: 상점 예치금 조회
+  kind: response
+  label: 일부 성공 (207)
+  source: https://developer.gorelas.com/api-docs-md/request-9.md
+  value:
+    statusCode: 207
+    data:
+    - deliveryAgencyId: barogo
+      deliveryAgencyName: 바로고
+      deposit: 95000
+      bank: KB국민은행
+      accountNumber: 123123123123123
+      depositor: 홍길동
+    errors:
+    - category: BAD_GATEWAY
+      errorCode: EXTERNAL_SERVER_ERROR
+      message: '[moacall] fail request delivery agency service'
+      info:
+        deliveryAgencyId: moacall
+        deliveryAgencyName: 모아콜
+- operationId: getDeliveryAgencyConditions
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-conditions
+  method: GET
+  variant: 배달대행사 상태 조회
+  kind: response
+  label: 배달이 가능한 상태
+  source: https://developer.gorelas.com/api-docs-md/request-10.md
+  value:
+    statusCode: 200
+    data:
+    - deliveryAgencyId: barogo
+      deliveryAgencyName: 바로고
+      isDeliveryPossible: true
+      delayTime: 10
+      totalExtraCharge: 500
+      extraCharges:
+      - dataType: FIXED
+        type: HOLIDAY
+        status: 'ON'
+        charge: 500
+      - dataType: NONE
+        type: WEATHER
+        status: 'ON'
+        charge: null
+      pickupMinimumAt: 1674742904640
+- operationId: getDeliveryAgencyConditions
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-conditions
+  method: GET
+  variant: 배달대행사 상태 조회
+  kind: response
+  label: 배달이 불가능한 상태
+  source: https://developer.gorelas.com/api-docs-md/request-10.md
+  value:
+    statusCode: 200
+    data:
+    - deliveryAgencyId: barogo
+      deliveryAgencyName: 바로고
+      isDeliveryPossible: false
+      reason: BAD_WEATHER
+- operationId: getDeliveryAgencyConditions
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/delivery-conditions
+  method: GET
+  variant: 배달대행사 상태 조회
+  kind: response
+  label: 일부 성공 (207)
+  source: https://developer.gorelas.com/api-docs-md/request-10.md
+  value:
+    statusCode: 207
+    data:
+    - deliveryAgencyId: barogo
+      deliveryAgencyName: 바로고
+      isDeliveryPossible: true
+      delayTime: 10
+      totalExtraCharge: 500
+      extraCharges:
+      - dataType: FIXED
+        type: WEATHER
+        charge: 500
+      pickupMinimumAt: 1674742904640
+    errors:
+    - category: BAD_GATEWAY
+      errorCode: EXTERNAL_SERVER_ERROR
+      message: '[moacall] fail request delivery agency service'
+      info:
+        deliveryAgencyId: moacall
+        deliveryAgencyName: 모아콜
+- operationId: listStores
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/stores
+  method: GET
+  variant: 상점 매핑
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value: {}
+- operationId: listStores
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/stores
+  method: GET
+  variant: 상점 매핑
+  kind: response
+  label: Response Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+    - storeId: 12266
+      name: 고릴라 치킨
+      businessNumber: '1112255555'
+      phone: '021112222'
+      jibunAddress: 서울특별시 강남구 논현동 117
+      roadAddress: 서울특별시 강남구 언주로134길 32
+      detailAddress: 씨앤에스빌딩 4층
+      createdAt: 1764821510000
+    - storeId: 47755
+      name: 고릴라 피자
+      businessNumber: '1112255555'
+      phone: '021231234'
+      jibunAddress: 서울 강남구 삼성동 159
+      roadAddress: 서울 강남구 영동대로 513
+      detailAddress: 99층 1004호
+      createdAt: 1764821510000
+- operationId: createStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping
+  method: POST
+  variant: 상점 매핑
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: TEST_00000123
+    storeId: 12266
+- operationId: createStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping
+  method: POST
+  variant: 상점 매핑
+  kind: response
+  label: 성공 응답 예시
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+- operationId: createStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping
+  method: POST
+  variant: 상점 매핑
+  kind: response
+  label: 거절 응답 예시
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      reason: NOT_FOUND_STORE
+- operationId: pauseStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping/pause
+  method: PUT
+  variant: 상점 매핑
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: TEST_00000123
+    storeId: 12266
+- operationId: pauseStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping/pause
+  method: PUT
+  variant: 상점 매핑
+  kind: response
+  label: 성공 응답 예시
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+- operationId: pauseStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping/pause
+  method: PUT
+  variant: 상점 매핑
+  kind: response
+  label: 거절 응답 예시
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+      isSuccess: true
+      reason: NOT_FOUND_STORE
+- operationId: getStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping/{orderAgencyStoreId}
+  method: GET
+  variant: 상점 매핑
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value: {}
+- operationId: getStoreMapping
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/store-mapping/{orderAgencyStoreId}
+  method: GET
+  variant: 상점 매핑
+  kind: response
+  label: Response Example
+  source: https://developer.gorelas.com/api-docs-md/request-12.md
+  value:
+    statusCode: 200
+    data:
+    - storeId: 12266
+      orderAgencyId: gorela_chicken
+      orderAgencyStoreId: TEST_00000123
+      mappingStatus: DONE
+    - storeId: 47755
+      orderAgencyId: gorela_chicken
+      orderAgencyStoreId: TEST_00000123
+      mappingStatus: PAUSED
+- operationId: getStoreAreas
+  api: openapi/barogo-gorela-openapi.yml
+  path: /api/order-agency-stores/{orderAgencyStoreId}/areas
+  method: GET
+  variant: 상점 권역/구역 조회
+  kind: response
+  label: 성공
+  source: https://developer.gorelas.com/api-docs-md/request-13.md
+  value:
+    statusCode: 200
+    data:
+      orderAgencyId: gorela_chicken
+      orderAgencyStoreId: gorela_chicken_store_1
+      storeId: 12223
+      features:
+      - type: Feature
+        properties:
+          areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+          areaName: 상점1 권역
+          areaType: DELIVERY_POSSIBLE_AREA
+        geometry:
+          type: Polygon
+          coordinates:
+          - - - 127.03087926803886
+              - 37.51408656999381
+            - - 127.02146758744085
+              - 37.51109732162127
+            - - 127.0244514673468
+              - 37.50457346611247
+            - - 127.01970098768997
+              - 37.5029525439367
+            - - 127.02150854924217
+              - 37.496176662210175
+            - - 127.02761570058925
+              - 37.49786928477963
+            - - 127.02973983826172
+              - 37.493111453318974
+            - - 127.03933039172989
+              - 37.49584771080132
+            - - 127.03670929291451
+              - 37.50082210929581
+            - - 127.04268157616359
+              - 37.50273023472369
+            - - 127.06299831976
+              - 37.50881194144773
+            - - 127.0602430709071
+              - 37.51436356478256
+            - - 127.05708037588343
+              - 37.52016759719988
+            - - 127.04124198687562
+              - 37.51729097936169
+            - - 127.03087926803886
+              - 37.51408656999381
+- operationId: onDeliveryStatusChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/status
+  method: POST
+  variant: 배달 상태 변경
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-1.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    deliveryStatus: PICKUP_FINISHED
+    changedAt: 1674808522881
+    driverPhone: 01099999999
+    hubPhone: '021231234'
+    totalDeliveryPrice: 3800
+    deliveryPrice: 3300
+    totalExtraCharge: 500
+    extraCharges:
+    - dataType: FIXED
+      type: WEATHER
+      charge: 500
+    VATPrice: 380
+    deliveryDistance: 1320
+    dropImageUrl: null
+    alcoholicBeverageSignImageUrl: null
+    totalDeliveriesPrice: 3800
+- operationId: onDeliveryDropNear
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/drop-near
+  method: POST
+  variant: 드랍지 곧 도착 알림
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-3.md
+  value:
+    orderAgencyId: albert
+    orderAgencyOrderId: BMO1712193318145
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    changedAt: 1674808522881
+- operationId: onDeliveryAccepted
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/accepted
+  method: POST
+  variant: 배달 접수
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-4.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    pickupExpectedAt: 1674808200248
+    changedAt: 1674807600884
+- operationId: onDeliveryPickupExpectedAtChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/pickup-expected-at
+  method: POST
+  variant: 배달 정보
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    pickupExpectedAt: 1674806400000
+- operationId: onDeliveryDropExpectedAtChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/drop-expected-at
+  method: POST
+  variant: 배달 정보
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    dropExpectedAt: 1674807900000
+- operationId: onDeliveryChargeChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/delivery-charge-info
+  method: POST
+  variant: 배달 정보
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    deliveryAgencyId: barogo
+    totalDeliveryPrice: 4000
+    deliveryPrice: 3500
+    extraCharges:
+    - dataType: FIXED
+      type: WEATHER
+      charge: 500
+    VATPrice: 380
+    deliveryDistance: 1320
+    delayTime: 10
+    chargeChangeReason: CHANGE_DISTANCE
+    changedAt: 1674765197398
+    totalDeliveriesPrice: 4000
+- operationId: onDeliveryDropInfoChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/drop-info
+  method: POST
+  variant: 배달 정보
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+  value:
+    orderAgencyId: barogo_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: barogo_chicken_store_1
+    orderId: 190517171824940
+    deliveryAgencyId: barogo
+    dropJibunAddress: 서울 강남구 논현동 117
+    dropRoadAddress: 서울 강남구 언주로134길 32
+    dropAddressDetail: 5층 505호
+    dropLocation:
+      latitude: '37.51123411'
+      longitude: '127.0332331'
+    dropInfoChangeReason: WRONG_RECEIVER_INFO
+    changedAt: 1674765197398
+- operationId: onStoreDeliveryDisabled
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /stores/delivery-disable
+  method: POST
+  variant: 배달 중단 / 해제
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-6.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStores:
+    - orderAgencyStoreId: gorela_chicken_store_12
+      reason: BAD_WEATHER
+    - orderAgencyStoreId: gorela_chicken_store_23
+      reason: BAD_WEATHER
+- operationId: onStoreDeliveryEnabled
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /stores/delivery-enable
+  method: POST
+  variant: 배달 중단 / 해제
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-6.md
+  value:
+    orderAgencyId: barogo_chicken
+    orderAgencyStoreIds:
+    - gorela_chicken_store_12
+    - gorela_chicken_store_23
+- operationId: onOrderPaymentInfoChanged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /order/payment-info
+  method: POST
+  variant: 주문 결제 정보 변경
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-7.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: gorela_chicken_order_1
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 1234
+    totalPayPrice: 10000
+    actualPayPrice: 10000
+    prepaidPrice: 0
+    paymentCashPrice: 0
+    paymentCardPrice: 10000
+    taxFreePayPrice: 0
+- operationId: onDeliveryCardPayments
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/payments
+  method: POST
+  variant: 카드 결제 내역
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-8.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    payments:
+    - paymentMethod: CARD
+      cardCompany: 신한카드
+      cardNumber: 1111********2222
+      vanCompany: ABC-VAN
+      approvalNumber: 12345-12-147
+      approvalAt: 1674810824156
+      instalment: 0
+      charge: 30000
+      isCanceled: false
+    - paymentMethod: CARD
+      cardCompany: KB국민카드
+      cardNumber: 1234********5678
+      vanCompany: ABC-VAN
+      approvalNumber: 12345-12-133
+      approvalAt: 1674810690156
+      instalment: 0
+      charge: 30000
+      isCanceled: true
+    - paymentMethod: CARD
+      cardCompany: KB국민카드
+      cardNumber: 1234********5678
+      vanCompany: ABC-VAN
+      approvalNumber: 12345-12-133
+      approvalAt: 1674810643156
+      instalment: 0
+      charge: 30000
+      isCanceled: false
+- operationId: onDeliveryCashReceipts
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /delivery/cash-receipts
+  method: POST
+  variant: 현금영수증 발급 내역
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-9.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyOrderId: TEST_00000123
+    orderAgencyStoreId: gorela_chicken_store_1
+    orderId: 230127171824940
+    cashReceipts:
+    - vanCompany: ABC-VAN
+      approvalNumber: 12345-12-147
+      approvalAt: 1674810824156
+      charge: 30000
+      isCanceled: false
+    - vanCompany: ABC-VAN
+      approvalNumber: 12345-12-133
+      approvalAt: 1674810690156
+      charge: 30000
+      isCanceled: true
+    - vanCompany: ABC-VAN
+      approvalNumber: 12345-12-133
+      approvalAt: 1674810643156
+      charge: 30000
+      isCanceled: false
+- operationId: onStoreDepositCharged
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /store/deposit-info
+  method: POST
+  variant: 상점 예치금 충전
+  kind: request
+  label: Request
+  source: https://developer.gorelas.com/api-docs-md/callback-10.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    storeId: 1220
+    addedDeposit: 100000
+    afterDeposit: 150000
+    beforeDeposit: 50000
+    deliveryAgencyId: barogo
+- operationId: onStoreAreaCreated
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /store/areas/create
+  method: POST
+  variant: 상점 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    storeId: 12223
+    features:
+    - type: Feature
+      properties:
+        areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+        areaName: 상점1 권역
+        areaType: DELIVERY_POSSIBLE_AREA
+      geometry:
+        type: Polygon
+        coordinates:
+        - - - 127.03087926803886
+            - 37.51408656999381
+          - - 127.02146758744085
+            - 37.51109732162127
+          - - 127.0244514673468
+            - 37.50457346611247
+          - - 127.01970098768997
+            - 37.5029525439367
+          - - 127.02150854924217
+            - 37.496176662210175
+          - - 127.02761570058925
+            - 37.49786928477963
+          - - 127.02973983826172
+            - 37.493111453318974
+          - - 127.03933039172989
+            - 37.49584771080132
+          - - 127.03670929291451
+            - 37.50082210929581
+          - - 127.04268157616359
+            - 37.50273023472369
+          - - 127.06299831976
+            - 37.50881194144773
+          - - 127.0602430709071
+            - 37.51436356478256
+          - - 127.05708037588343
+            - 37.52016759719988
+          - - 127.04124198687562
+            - 37.51729097936169
+          - - 127.03087926803886
+            - 37.51408656999381
+- operationId: onStoreAreaUpdated
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /store/areas/update
+  method: POST
+  variant: 상점 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    storeId: 12223
+    features:
+    - type: Feature
+      properties:
+        areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+        areaName: 상점1 권역
+        areaType: DELIVERY_POSSIBLE_AREA
+      geometry:
+        type: Polygon
+        coordinates:
+        - - - 127.0307435202268
+            - 37.51405056524653
+          - - 127.02146758744085
+            - 37.51109732162127
+          - - 127.0244514673468
+            - 37.50457346611247
+          - - 127.01970098768997
+            - 37.5029525439367
+          - - 127.02150854924217
+            - 37.496176662210175
+          - - 127.02761570058925
+            - 37.49786928477963
+          - - 127.02973983826172
+            - 37.493111453318974
+          - - 127.03933039172989
+            - 37.49584771080132
+          - - 127.03670929291451
+            - 37.50082210929581
+          - - 127.04268157616359
+            - 37.50273023472369
+          - - 127.04988759168357
+            - 37.48865368674333
+          - - 127.06973926962543
+            - 37.496671609448654
+          - - 127.06299831976
+            - 37.50881194144773
+          - - 127.0602430709071
+            - 37.51436356478256
+          - - 127.05708037588343
+            - 37.52016759719988
+          - - 127.04124198687562
+            - 37.51729097936169
+          - - 127.03912981476645
+            - 37.5232112875261
+          - - 127.0337556197211
+            - 37.52149203066994
+          - - 127.02808754034471
+            - 37.51971853879475
+          - - 127.0307435202268
+            - 37.51405056524653
+- operationId: onStoreAreaDeleted
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /store/areas/delete
+  method: POST
+  variant: 상점 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+  value:
+    orderAgencyId: gorela_chicken
+    orderAgencyStoreId: gorela_chicken_store_1
+    storeId: 12223
+    areaIds:
+    - a23eeed7-6319-4136-b7de-52a57d6a15e2
+- operationId: onOrderAgencyAreaCreated
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /order-agency/area/create
+  method: POST
+  variant: 주문 제휴사 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+  value:
+    orderAgencyId: gorela_chicken
+    feature:
+      type: Feature
+      properties:
+        areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d
+        areaType: DELIVERY_POSSIBLE_AREA
+        areaName: 테스트 권역
+      geometry:
+        type: Polygon
+        coordinates:
+        - - - 127.03087926803886
+            - 37.51408656999381
+          - - 127.02146758744085
+            - 37.51109732162127
+          - - 127.0244514673468
+            - 37.50457346611247
+          - - 127.01970098768997
+            - 37.5029525439367
+          - - 127.02150854924217
+            - 37.496176662210175
+          - - 127.02761570058925
+            - 37.49786928477963
+          - - 127.02973983826172
+            - 37.493111453318974
+          - - 127.03933039172989
+            - 37.49584771080132
+          - - 127.03670929291451
+            - 37.50082210929581
+          - - 127.04268157616359
+            - 37.50273023472369
+          - - 127.06299831976
+            - 37.50881194144773
+          - - 127.0602430709071
+            - 37.51436356478256
+          - - 127.05708037588343
+            - 37.52016759719988
+          - - 127.04124198687562
+            - 37.51729097936169
+          - - 127.03087926803886
+            - 37.51408656999381
+- operationId: onOrderAgencyAreaUpdated
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /order-agency/area/update
+  method: POST
+  variant: 주문 제휴사 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+  value:
+    orderAgencyId: gorela_chicken
+    feature:
+      type: Feature
+      properties:
+        areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d
+        areaType: DELIVERY_POSSIBLE_AREA
+        areaName: 테스트 권역
+      geometry:
+        type: Polygon
+        coordinates:
+        - - - 127.0307435202268
+            - 37.51405056524653
+          - - 127.02146758744085
+            - 37.51109732162127
+          - - 127.0244514673468
+            - 37.50457346611247
+          - - 127.01970098768997
+            - 37.5029525439367
+          - - 127.02150854924217
+            - 37.496176662210175
+          - - 127.02761570058925
+            - 37.49786928477963
+          - - 127.02973983826172
+            - 37.493111453318974
+          - - 127.03933039172989
+            - 37.49584771080132
+          - - 127.03670929291451
+            - 37.50082210929581
+          - - 127.04268157616359
+            - 37.50273023472369
+          - - 127.04988759168357
+            - 37.48865368674333
+          - - 127.06973926962543
+            - 37.496671609448654
+          - - 127.06299831976
+            - 37.50881194144773
+          - - 127.0602430709071
+            - 37.51436356478256
+          - - 127.05708037588343
+            - 37.52016759719988
+          - - 127.04124198687562
+            - 37.51729097936169
+          - - 127.03912981476645
+            - 37.5232112875261
+          - - 127.0337556197211
+            - 37.52149203066994
+          - - 127.02808754034471
+            - 37.51971853879475
+          - - 127.0307435202268
+            - 37.51405056524653
+- operationId: onOrderAgencyAreaDeleted
+  api: openapi/barogo-gorela-callbacks-openapi.yml
+  path: /order-agency/area/delete
+  method: POST
+  variant: 주문 제휴사 권역/구역 정보
+  kind: request
+  label: Request Example
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+  value:
+    orderAgencyId: gorela_chicken
+    areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d

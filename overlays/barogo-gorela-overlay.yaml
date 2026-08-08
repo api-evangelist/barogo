@@ -1,0 +1,87 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Barogo Gorela Order Agency API
+  version: 1.0.0
+extends: openapi/barogo-gorela-openapi.yml
+x-generated: '2026-08-06'
+x-method: generated
+x-source: >-
+  Records what API Evangelist added on top of Barogo's published markdown reference when
+  transcribing it into OpenAPI. Barogo publishes no OpenAPI, so this overlay documents the
+  transcription decisions rather than edits to a provider-published document.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-slug: barogo
+      x-apievangelist-artifact-source: https://developer.gorelas.com/api-docs-md/
+      x-apievangelist-derivation: >-
+        Paths, methods, parameter names, types, length constraints, enum values, required flags,
+        descriptions and examples were transcribed verbatim from the provider's published
+        markdown reference. No operation, field or value was invented.
+      x-apievangelist-conventions: conventions/barogo-conventions.yml
+      x-apievangelist-errors: errors/barogo-problem-types.yml
+      x-apievangelist-authentication: authentication/barogo-authentication.yml
+      x-apievangelist-data-model: data-model/barogo-data-model.yml
+  - target: $.info
+    description: >-
+      The docs give no version identifier of any kind. info.version is set to the reference's
+      own "Last updated" date so the document is dateable, not to a Barogo version number.
+    update:
+      x-version-source: docs-last-updated
+  - target: $.servers
+    description: >-
+      Both hosts come from the 도메인 및 Header 설정 section of the integration guide. Neither is
+      declared in any provider-published machine-readable document.
+    update: {}
+  - target: $.components.securitySchemes.bearerAuth
+    description: >-
+      Modelled as http/bearer from the documented "Authorization : Bearer {API_Key}" header.
+      The docs call it an API Key; on the wire it is a bearer token, so http/bearer is the
+      faithful OpenAPI expression.
+    update: {}
+  - target: $.components.schemas.ErrorResponse
+    description: >-
+      Added by API Evangelist. The provider publishes the error envelope as a prose table in
+      the common reference, not as a schema, and does not attach it to any operation. Every
+      operation here references it for 400/401/404/409/429/500/502/503/504 — those status codes
+      come from the provider's published status-code table, applied uniformly because the
+      table is stated to apply to all operations.
+    update: {}
+  - target: $.paths[*][*]
+    description: >-
+      Every operation carries x-evidence naming the exact source document it was transcribed
+      from, so any claim in this spec is traceable to a fetched provider URL.
+    update: {}
+  - target: $.paths['/api/orders'].post
+    description: >-
+      POST /api/orders is documented FIVE times, once per intake variant (fixed/address,
+      fixed/store, ACCEPTED_ORDER). Since OpenAPI allows one operation per path+method, the
+      variants are expressed as a requestBody oneOf, each branch titled with its source
+      document and carrying x-source-doc. Nothing was merged away.
+    update: {}
+  - target: $.paths['/api/delivery-possible'].post
+    description: Same variant handling — the address-based and store-based quote bodies are oneOf branches.
+    update: {}
+  - target: $.paths['/api/flexible/orders'].post
+    description: Same variant handling for the flexible-fare intake.
+    update: {}
+  - target: $.paths['/api/flexible/delivery-possible'].post
+    description: Same variant handling for the flexible-fare quote.
+    update: {}
+known_transcription_notes:
+  - note: >-
+      Non-numeric constraints in the docs' Length column (">= actualPayPrice",
+      "[ 현재시간 .. 90분 ]", "[ 현재시간으로부터 90분 이후 .. 2개월 이내 ]") cannot be expressed in JSON
+      Schema. They are preserved verbatim as x-constraint on the field rather than dropped.
+  - note: >-
+      Enum descriptions are preserved as x-enum-descriptions, keyed by value, because OpenAPI
+      has no place for per-value documentation.
+  - note: >-
+      markOrderPrepareComplete's `reason` field is typed `boolean` in the provider's document
+      while carrying a three-value string enum. The transcription keeps the provider's declared
+      type rather than silently correcting it — this is a defect in Barogo's reference and
+      should be reported, not papered over.
+  - note: >-
+      Response schemas are wrapped in the published {statusCode, data} envelope. Where an
+      operation documents both a SUCCESS and a REJECT payload, the 200 response is a oneOf of
+      both, because the provider returns business rejections at HTTP 200.

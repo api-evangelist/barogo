@@ -1,0 +1,99 @@
+generated: '2026-08-06'
+method: probed
+result: none
+note: >-
+  No /.well-known/ discovery document is served on any Barogo or Gorela host. On
+  developer.gorelas.com every path answers HTTP 200 with the same 1985-byte single-page-app
+  shell — a control path (/zzz-ctl-xyz) returns a byte-identical body, so those 200s are
+  catch-all responses, not documents. They are recorded below as soft-404, not as hits.
+hosts:
+  - host: https://developer.gorelas.com
+    catch_all: true
+    control_probe:
+      path: /zzz-ctl-xyz
+      status: 200
+      bytes: 1985
+      content_type: text/html
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /.well-known/agent-card.json
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /.well-known/agent.json
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /.well-known/openid-configuration
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /.well-known/api-catalog
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /llms.txt
+        status: 200
+        bytes: 1985
+        result: soft-404 (identical to control)
+      - path: /robots.txt
+        status: 200
+        bytes: 22
+        result: 'real — the two-line allow-all robots policy'
+      - path: /sitemap.xml
+        status: 404
+        result: real 404
+      - path: /api-docs-md/
+        status: 403
+        result: real — directory listing forbidden, but individual .md documents under it are public
+  - host: https://www.barogo.com
+    catch_all: false
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /llms.txt
+        status: 404
+      - path: /robots.txt
+        status: 200
+        result: 'real — the two-line allow-all robots policy'
+  - host: https://career.barogo.com
+    catch_all: false
+    documents:
+      - path: /llms.txt
+        status: 200
+        result: >-
+          Real (a control path returns 404), but it is the imweb site-builder's AI-usage
+          boilerplate on the recruiting site — "User-agent: * / Allow: / / Commercial-use:
+          allowed / Research-use: allowed". Four lines, no API or documentation content. Not
+          an llms.txt in the developer sense and not wired as one.
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://api-interlocker.gorelas.com
+    note: Production API host. Root returns 404 — a real response from a real gateway, not a catch-all.
+    documents:
+      - path: /
+        status: 404
+  - host: https://staging-api-interlocker.gorelas.com
+    note: Staging API host.
+    documents:
+      - path: /
+        status: 404
+security_txt: null
+api_catalog: null
+openid_configuration: null
+agent_card: null

@@ -1,0 +1,54 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/index.md
+docs: https://developer.gorelas.com/linkage
+separation:
+  model: separate-hosts
+  detail: >-
+    Gorela separates test from live by HOST, not by key prefix or a mode flag. The same
+    Authorization: Bearer {API_Key} scheme is used in both; the docs give no way to tell a
+    test key from a live key by inspection, so an integrator must key environment selection
+    off the base URL.
+environments:
+  - name: 테스트 (staging)
+    api_base_url: https://staging-api-interlocker.gorelas.com
+    admin_console: https://staging-admin.gorelas.com
+  - name: 운영 (production)
+    api_base_url: https://api-interlocker.gorelas.com
+    admin_console: https://admin.gorelas.com
+guidance: >-
+  개발 및 테스트는 반드시 개발 환경 API를 사용하고, 실 서비스는 프로덕션 환경 API를 사용해야 합니다.
+  (Published as a standing rule in the Gorela developer MCP server's ruleset.)
+access:
+  self_serve: false
+  detail: >-
+    Staging access is not self-serve. A partner signs up on the developer site, registers the
+    order-agency entity under 연동 관리, and issues an API key — but the preceding commercial
+    agreement (제휴 협의) gates all of it. Production store mapping is arranged by a Barogo
+    sales/operations owner.
+  signup: https://developer.gorelas.com/linkage
+test_values:
+  published: false
+  detail: >-
+    No magic test identifiers, seed stores, fixture orders, simulated riders, test cards or
+    trigger tooling are published. Test data comes from the store mapping a partner is given
+    on staging, so an integrator cannot rehearse a delivery lifecycle from the docs alone.
+  test_cards: []
+  magic_identifiers: []
+  time_simulation: false
+  triggers: []
+sample_values_in_docs:
+  note: >-
+    The reference does carry worked request/response examples with sample identifiers — these
+    are illustrative payloads, not callable fixtures. They are captured verbatim in
+    examples/barogo-gorela-examples.yml (81 examples across 41 operations).
+  examples: examples/barogo-gorela-examples.yml
+gaps:
+  - No published test credentials, test store or test rider.
+  - No callback simulator, so a partner cannot trigger the 20 inbound callbacks on demand to test its own receiver.
+  - No time simulation for scheduled/reservation orders (예약 주문), which is the hardest flow to test.
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/index.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8

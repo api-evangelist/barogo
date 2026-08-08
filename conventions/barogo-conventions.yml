@@ -1,0 +1,135 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/common-doc.md
+docs: https://developer.gorelas.com/api-doc/common
+api: openapi/barogo-gorela-openapi.yml
+authentication:
+  style: bearer-api-key
+  header: 'Authorization: Bearer {API_Key}'
+  see: authentication/barogo-authentication.yml
+transport:
+  protocol: https
+  content_type: application/json
+  production_host: https://api-interlocker.gorelas.com
+  staging_host: https://staging-api-interlocker.gorelas.com
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    Gorela publishes no idempotency key header and no replay contract. The nearest guarantee
+    is uniqueness on the client-supplied orderAgencyOrderId — resubmitting the same id fails
+    with 409 CONFLICT / DUPLICATED_ID rather than returning the original result. That is
+    duplicate rejection, not idempotent replay: a client that times out mid-createOrder
+    cannot safely retry and must reconcile with getOrder instead.
+  duplicate_protection:
+    field: orderAgencyOrderId
+    error: {status: 409, category: CONFLICT, code: DUPLICATED_ID}
+  retry_guidance: >-
+    연동사측이 실패 응답을 받았을 때 즉시 재시도 하는 것은 지양합니다. 최소 10000ms(10초) 이상 간격을 두고
+    재시도 해주시길 바랍니다. (모든 API에 해당)
+  recommended_client_timeout_ms: 12000
+pagination:
+  style: page-number
+  operation: listOrders
+  detail: >-
+    주문 목록 조회 (GET /api/orders) is the only list operation with a paged surface. Ordering
+    is fixed to most-recent-first by order acceptance time (정렬은 주문 접수 기준 최신순). The
+    reference warns that indiscriminate polling can get a partner's requests restricted —
+    callbacks, not polling, are the intended way to track order progress.
+  see: openapi/barogo-gorela-openapi.yml#listOrders
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+  detail: >-
+    No free-form metadata bag. The partner's own keys travel as first-class fields:
+    orderAgencyId, orderAgencyOrderId, orderAgencyStoreId.
+request_tracing:
+  request_id_header: null
+  detail: No request-id or correlation header is documented. Correlation is by orderAgencyOrderId / orderId.
+versioning:
+  scheme: none-in-path
+  detail: >-
+    Paths are unversioned (/api/orders, /delivery/status). There is no version header, no
+    date-pinned version and no version selector. Change is communicated through the dated
+    developer reference (Last updated) and through the assigned TAM.
+  see: lifecycle/barogo-lifecycle.yml
+error_envelope:
+  shape: '{ "statusCode": <int>, "error": { "category", "errorCode", "message" } }'
+  rfc9457: false
+  business_rejections_are_200: true
+  detail: >-
+    Several operations return HTTP 200 with data.isSuccess=false plus a reason enum instead of
+    an HTTP error. Clients must branch on isSuccess, not on status alone.
+  see: errors/barogo-problem-types.yml
+partial_success:
+  status: 207
+  detail: >-
+    Fan-out reads across multiple delivery agencies (getStoreDepositInfo,
+    getDeliveryAgencyConditions) can answer 207 with a data[] of what succeeded and an
+    errors[] naming each delivery agency that failed. Treat 207 as "read the errors array",
+    not as success.
+rate_limiting:
+  documented: true
+  headers_published: false
+  detail: >-
+    A 429 TOO_MANY_REQUESTS error code exists and polling is explicitly discouraged, but no
+    limit values, quota window or RateLimit-* response headers are published. The signal is
+    an error after the fact, not a budget a client can plan against.
+  see: errors/barogo-problem-types.yml
+callbacks:
+  direction: gorela-to-partner
+  response_deadline_ms: 3000
+  retry_schedule_seconds: [2, 18, 50]
+  retry_count: 3
+  unimplemented_response: 404
+  detail: >-
+    콜백 전달 시 응답은 최대 3초까지만 대기합니다. 3초를 초과하면 타임아웃으로 처리됩니다. 타임아웃 발생 시
+    총 3회 재시도합니다. Gorela sends every callback it generates regardless of what a partner
+    has implemented; a partner answers 404 for the ones it has not built. Some callbacks
+    (card payments, cash receipts) always carry the full cumulative list, not a delta, and
+    their ordering against the completion callback is not guaranteed.
+  see: asyncapi/barogo-gorela-webhooks.yml
+units:
+  datetime: Timestamp (GMT+00:00), millisecond precision
+  distance: metre (m)
+  coordinates: WGS84, 6 or more decimal places
+  currency: KRW (integer, no minor units)
+domain_rules:
+  - rule: order-to-delivery fan-out
+    detail: >-
+      One order can produce N deliveries; order state and delivery state are tracked
+      separately. An order only closes once every child delivery is terminal (rejected,
+      completed or cancelled). Integrators that model 1:1 will mis-report state.
+  - rule: product total price formula
+    detail: 'product.totalPrice = (product.unitPrice + (option.unitPrice * option.quantity)) * product.quantity'
+  - rule: pickup times
+    detail: >-
+      pickupWishAt is what the merchant WANTS; pickupExpectedAt is what Gorela EXPECTS and it
+      moves. The docs require partners to surface pickupExpectedAt to the merchant.
+  - rule: contactless delivery
+    detail: Use the isUntact boolean. A memo string does not guarantee contactless handling.
+  - rule: delivery tip
+    detail: A customer-paid delivery tip is modelled as a product of type DELIVERY_TIP, not a separate field.
+firewall:
+  inbound_to_gorela: none
+  partner_inbound_allowlist_on_request: true
+  contact: tech_poc@barogo.com
+  store_program_hosts:
+    - '*.gorelas.com'
+    - '*.barogo.io'
+    - '*.8590.co.kr'
+    - host.s9juso.co.kr
+    - https://api-whale.barogo.io
+    - http://barogo.s9juso.co.kr
+cross_links:
+  errors: errors/barogo-problem-types.yml
+  lifecycle: lifecycle/barogo-lifecycle.yml
+  authentication: authentication/barogo-authentication.yml
+  sandbox: sandbox/barogo-sandbox.yml
+  webhooks: asyncapi/barogo-gorela-webhooks.yml
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/common-doc.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8

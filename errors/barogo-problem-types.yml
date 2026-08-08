@@ -1,0 +1,175 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/common-doc.md
+docs: https://developer.gorelas.com/api-doc/common
+format: custom-envelope
+note: >-
+  Gorela does not use RFC 9457 application/problem+json. It publishes a single custom error
+  envelope with a three-part identity — HTTP statusCode, an errorCategory, and a stable
+  errorCode string. The table below is the provider's own published registry, transcribed
+  verbatim from the common API reference. Success responses carry the same envelope shape
+  with a data payload instead of an error object.
+envelope:
+  success:
+    shape: '{ "statusCode": <int>, "data": { ... } }'
+    partial_success: '{ "statusCode": 207, "data": [ ... ], "errors": [ { "category", "errorCode", "message", "info" } ] }'
+    status_codes:
+      - status: 200
+        description: 요청한 작업이 성공했을 때 응답됩니다.
+      - status: 201
+        description: 데이터 생성에 성공했을 때 응답됩니다.
+      - status: 204
+        description: 데이터 삭제에 성공했을 때 응답됩니다.
+      - status: 207
+        description: 요청한 작업이 일부만 성공했을 때 응답됩니다.
+  error:
+    shape: '{ "statusCode": <int>, "error": { "category": <errorCategory>, "errorCode": <errorCode>, "message": <string> } }'
+    fields:
+      - field: statusCode
+        description: HTTP status code for the request outcome.
+      - field: error.category
+        description: Error category (errorCategory) — the coarse class of failure.
+      - field: error.errorCode
+        description: Stable machine-readable error code. This is the field to branch on.
+      - field: error.message
+        description: Human-readable detail, e.g. "should have required property 'orderAgencyId'".
+    example: |-
+      {
+        "statusCode": 400,
+        "error": {
+          "category": "BAD_REQUEST",
+          "errorCode": "SCHEMA_VALIDATE",
+          "message": "should have required property 'orderAgencyId'"
+        }
+      }
+problems:
+  - status: 400
+    category: BAD_REQUEST
+    code: SCHEMA_VALIDATE
+    title: 요청 데이터의 검증에 통과하지 못한 경우
+    remediation: Validate the request body against the operation schema before sending; the message names the failing property.
+  - status: 400
+    category: BAD_REQUEST
+    code: NOT_ALLOW
+    title: 허용되지 않는 작업이 요청된 경우
+  - status: 400
+    category: BAD_REQUEST
+    code: REQUEST_JSON_PARSING
+    title: 요청 데이터의 Json 형태가 잘못된 경우
+  - status: 400
+    category: BAD_REQUEST
+    code: INVALID_INPUT
+    title: 유효하지 않은 정보로 요청한 경우
+  - status: 400
+    category: BAD_REQUEST
+    code: NONE_DELIVERY_AGENCY_MAPPING
+    title: 배달대행사 매핑이 존재하지 않거나 매핑 상태가 모두 중지인 경우
+    remediation: Complete store mapping (createStoreMapping) before submitting orders for that store.
+  - status: 400
+    category: BAD_REQUEST
+    code: NONE_ORDER_AGENCY_MAPPING
+    title: 주문 제휴사 매핑이 존재하지 않거나 매핑 상태가 중지인 경우
+  - status: 401
+    category: UNAUTHORIZED
+    code: EXPIRED_API_KEY
+    title: API Key의 유효기간이 만료되었거나, 삭제된 경우
+    remediation: Reissue the API key from the 연동 관리 console at https://developer.gorelas.com/linkage.
+  - status: 401
+    category: UNAUTHORIZED
+    code: VERIFY_API_KEY_FAIL
+    title: API Key 검증에 실패한 경우
+    remediation: 'Send the key as `Authorization: Bearer {API_Key}`.'
+  - status: 401
+    category: UNAUTHORIZED
+    code: ROLE_DENY
+    title: (사용할 수 없는) 권한이 없는 API를 요청한 경우
+  - status: 404
+    category: NOT_FOUND
+    code: NOT_FOUND_API
+    title: 존재하지 않는 API를 요청한 경우
+  - status: 404
+    category: NOT_FOUND
+    code: NOT_FOUND_RESOURCE
+    title: 해당 리소스(데이터)가 존재하지 않는 경우
+  - status: 404
+    category: NOT_FOUND
+    code: EXTERNAL_NOT_FOUND_RESOURCE
+    title: 배달대행사에 해당 리소스(데이터)가 존재하지 않는 경우
+    note: Failure originates downstream at the delivery agency, not at Gorela.
+  - status: 409
+    category: CONFLICT
+    code: DUPLICATED_ID
+    title: 생성하려는 데이터의 아이디가 이미 존재하는 경우
+    note: >-
+      This is the closest thing Gorela publishes to a duplicate-submission guard — a repeat
+      createOrder with the same orderAgencyOrderId conflicts rather than replaying. It is
+      duplicate rejection, not idempotent replay; no Idempotency-Key header is documented.
+  - status: 409
+    category: CONFLICT
+    code: DUPLICATED
+    title: 생성하려는 데이터가 이미 존재하는 경우
+  - status: 429
+    category: TOO_MANY_REQUESTS
+    code: TOO_MANY_REQUESTS
+    title: API를 요청하는 횟수가 제한을 초과한 경우
+    remediation: >-
+      Back off at least 10000ms before retrying. Order polling is explicitly rate-guarded —
+      the order-list reference warns that indiscriminate polling can get requests restricted.
+  - status: 500
+    category: INTERNAL_SERVER_ERROR
+    code: DB_FAIL
+    title: 데이터베이스에서 에러가 발생한 경우
+  - status: 500
+    category: INTERNAL_SERVER_ERROR
+    code: JSON_PARSING
+    title: 요청 데이터 처리 중 Json 형태가 잘못된 경우
+  - status: 500
+    category: INTERNAL_SERVER_ERROR
+    code: SERVER_ERROR
+    title: 알 수 없는 서버 에러가 발생한 경우
+  - status: 502
+    category: BAD_GATEWAY
+    code: EXTERNAL_SERVER_ERROR
+    title: 배달대행사 서버에서 에러가 발생한 경우
+  - status: 502
+    category: BAD_GATEWAY
+    code: NOT_ALLOW_EXTERNAL
+    title: 배달대행사에 허용되지 않는 작업이 요청되어 거절된 경우
+  - status: 502
+    category: BAD_GATEWAY
+    code: MAINTENANCE_TIME
+    title: 서비스 점검 시간
+  - status: 503
+    category: SERVICE_UNAVAILABLE
+    code: SERVICE_UNAVAILABLE
+    title: 서비스 이용 불가 상태인 경우
+  - status: 503
+    category: SERVICE_UNAVAILABLE
+    code: EXTERNAL_SERVICE_UNAVAILABLE
+    title: 배달대행사 서비스 이용 불가 상태인 경우
+  - status: 504
+    category: GATEWAY_TIMEOUT
+    code: GATEWAY_TIMEOUT
+    title: 내부 서버간 통신 중 타임아웃이 발생한 경우
+  - status: 504
+    category: GATEWAY_TIMEOUT
+    code: EXTERNAL_SERVER_TIMEOUT
+    title: 외부(배달대행사 등) 서버간 통신 중 타임아웃이 발생한 경우
+rejection_reasons:
+  note: >-
+    Several operations answer HTTP 200 with `data.isSuccess: false` and a `reason` enum
+    rather than an HTTP error. These are business rejections, not transport errors — an
+    integrating client must branch on isSuccess, not on the status code alone.
+  sources:
+    - operationId: cancelOrder
+      source: https://developer.gorelas.com/api-docs-md/request-7.md
+    - operationId: markOrderPrepareComplete
+      reasons: [ALREADY_COMPLETED_ORDER_PRODUCT_PREPARE, INVALID_STATUS, ETC]
+      source: https://developer.gorelas.com/api-docs-md/request-11.md
+    - operationId: updateOrderPickupWishAt
+      source: https://developer.gorelas.com/api-docs-md/request-8.md
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/common-doc.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8

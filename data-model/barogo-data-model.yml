@@ -1,0 +1,196 @@
+generated: '2026-08-06'
+method: derived
+source: openapi/barogo-gorela-openapi.yml
+docs: https://developer.gorelas.com/api-docs-md/request-6.md
+note: >-
+  Entity graph derived from the Gorela order payload. The defining shape of this model is that
+  ORDER and DELIVERY are separate aggregates: 고릴라는 주문 데이터와 배달 데이터가 분리된 구조를 갖고 있어,
+  1개의 주문은 N개의 배달로 이어지거나 확장될 수 있으며. An order closes only when every child delivery
+  is terminal. Integrators that collapse order and delivery into one record will mis-report
+  state — this is the single most consequential modelling decision in the API.
+identifier_conventions:
+  - id: orderId
+    type: int64
+    owner: gorela
+    description: Gorela's order identifier.
+  - id: orderAgencyOrderId
+    type: string (<= 50)
+    owner: order-agency
+    description: The partner's own order key. Client-supplied, unique, and the key most read operations address.
+  - id: orderAgencyDailyOrderId
+    type: string
+    owner: order-agency
+    description: Human-facing daily sequence number for the order.
+  - id: storeId
+    type: integer
+    owner: gorela
+    description: Gorela's store identifier.
+  - id: orderAgencyStoreId
+    type: string (<= 100)
+    owner: order-agency
+    description: The partner's own store key. Mapped 1:1 to storeId before orders can flow.
+  - id: orderAgencyId
+    type: string (<= 30)
+    owner: gorela
+    description: Identifies the partner itself; present on every request and every callback.
+  - id: deliveryAgencyId
+    type: string (<= 30)
+    owner: gorela
+    description: Identifies the delivery agency executing a delivery (e.g. "barogo", "moacall").
+entities:
+  - name: OrderAgency
+    description: The partner platform that takes the customer's order — a POS, marketplace or commerce platform.
+    key: orderAgencyId
+  - name: Store
+    description: A merchant location. Exists on both sides and must be mapped before store-based ordering.
+    key: storeId
+  - name: StoreMapping
+    description: The 1:1 link between an orderAgencyStoreId and a Gorela storeId. Can be paused.
+    key: [orderAgencyStoreId, storeId]
+  - name: Order
+    description: A customer order handed to Gorela. Carries pickup and drop addresses, prices, memos and products.
+    key: orderId
+    alternate_key: orderAgencyOrderId
+  - name: OrderStatus
+    description: Append-only status history on an order (statuses[]).
+  - name: OrderProduct
+    description: A line item. "본 상품" plus its options is one product; a delivery tip is a product of type DELIVERY_TIP.
+  - name: OrderProductOption
+    description: An option attached to a product. Same base product with different options is a DIFFERENT product.
+  - name: Delivery
+    description: A dispatch job created from an order and executed by a delivery agency. One order can have N.
+    key: [orderId, deliveryAgencyId]
+  - name: DeliveryStatus
+    description: Append-only status history on a delivery (statuses[]).
+  - name: ExtraCharge
+    description: A surcharge line on a delivery's fare (할증).
+  - name: Payment
+    description: An on-the-spot card payment taken by the rider at drop-off. Always delivered as a cumulative list.
+  - name: CashReceipt
+    description: A cash receipt issued at drop-off. Also always cumulative.
+  - name: DeliveryAgency
+    description: The dispatch company that assigns a rider. Gorela brokers across several.
+    key: deliveryAgencyId
+  - name: Deposit
+    description: A store's prepaid balance (Cash, Money) held with a delivery agency, plus its virtual account.
+  - name: Area
+    description: A store's or partner's delivery zone — deliverable area, excluded area, or surcharge area (권역/구역).
+  - name: Coordinate
+    description: WGS84 latitude/longitude to 6+ decimal places, embedded on pickup and drop locations.
+relationships:
+  - from: Order
+    to: Delivery
+    kind: has_many
+    via: deliveries[]
+    note: The 1:N that defines the model. Terminal state on the order requires terminal state on every delivery.
+  - from: Delivery
+    to: Order
+    kind: belongs_to
+    via: orderId
+  - from: Order
+    to: OrderProduct
+    kind: has_many
+    via: orderProducts[]
+  - from: OrderProduct
+    to: OrderProductOption
+    kind: has_many
+    via: options[]
+  - from: Order
+    to: OrderStatus
+    kind: has_many
+    via: statuses[]
+  - from: Delivery
+    to: DeliveryStatus
+    kind: has_many
+    via: statuses[]
+  - from: Delivery
+    to: ExtraCharge
+    kind: has_many
+    via: extraCharges[]
+  - from: Delivery
+    to: Payment
+    kind: has_many
+    via: payments[]
+  - from: Delivery
+    to: DeliveryAgency
+    kind: belongs_to
+    via: deliveryAgencyId
+  - from: Order
+    to: Store
+    kind: belongs_to
+    via: storeId
+  - from: Order
+    to: OrderAgency
+    kind: belongs_to
+    via: orderAgencyId
+  - from: StoreMapping
+    to: Store
+    kind: has_one
+    via: storeId
+  - from: Store
+    to: Deposit
+    kind: has_many
+    via: deliveryAgencyId
+    note: One balance per delivery agency the store is mapped to.
+  - from: Store
+    to: Area
+    kind: has_many
+    via: areas[]
+  - from: OrderAgency
+    to: Area
+    kind: has_many
+    via: areas[]
+  - from: Order
+    to: Coordinate
+    kind: has_one
+    via: pickupLocation / dropLocation
+addressing:
+  note: >-
+    Korean addresses are carried in both forms on every order — 지번 (lot-based, *JibunAddress)
+    and 도로명 (road-name, *RoadAddress) — plus a detail line, an entrance password, and a free
+    guide string. Gorela may normalise a submitted address; the docs warn that a malformed
+    address becomes the partner's liability during delivery.
+price_model:
+  formula: 'product.totalPrice = (product.unitPrice + (option.unitPrice * option.quantity)) * product.quantity'
+  order_prices:
+    - field: totalPayPrice
+      meaning: 총 상품 금액 — gross product total before discounts.
+    - field: actualPayPrice
+      meaning: 실제 결제 금액 — what the customer actually paid.
+    - field: prepaidPrice
+      meaning: Prepaid portion.
+    - field: paymentCashPrice
+      meaning: Cash to be collected by the rider.
+    - field: paymentCardPrice
+      meaning: Card to be taken by the rider.
+    - field: taxFreePayPrice
+      meaning: Tax-free portion.
+  delivery_prices:
+    - field: deliveryPrice
+      meaning: Base delivery fare.
+    - field: totalExtraCharge
+      meaning: Sum of extraCharges[] surcharges.
+    - field: totalDeliveryPrice
+      meaning: Fare actually charged.
+    - field: VATPrice
+      meaning: VAT component.
+    - field: cancelFee
+      meaning: Cancellation fee, which can be non-zero depending on delivery progress.
+fare_modes:
+  - mode: 고정 요금 | 의무 수행 (fixed fare, obligated performance)
+    detail: Gorela sets the fare and takes responsibility for completing the delivery.
+    operations: [checkDeliveryPossible, createOrder]
+  - mode: 유연 요금 | 자율 수행 (flexible fare, discretionary performance)
+    detail: >-
+      The partner sets the fare and riders opt in. An unattractive fare may go unassigned and
+      auto-cancel after a period. Fare can be raised pre-assignment via updateFlexibleOrderDeliveryPrice.
+    operations: [checkFlexibleDeliveryPossible, createFlexibleOrder, updateFlexibleOrderDeliveryPrice]
+binding_modes:
+  - mode: 주소 기반 (address-based)
+    detail: Pickup and drop addresses are supplied per order; no store registration or mapping needed.
+  - mode: 상점 기반 (store-based)
+    detail: Requires store registration and a StoreMapping; the order references orderAgencyStoreId.
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/request-6.md
+  http_status: 200

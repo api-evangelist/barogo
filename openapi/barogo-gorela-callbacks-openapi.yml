@@ -1,0 +1,2175 @@
+openapi: 3.1.0
+info:
+  title: Barogo Gorela Callback (Webhook) API
+  version: '2026-06-23'
+  summary: 고릴라 → 주문 제휴사 콜백(웹훅) 규격
+  description: 'The 20 callbacks Gorela POSTs to an order agency''s own endpoints as an order and its child deliveries progress.
+    Gorela sends EVERY callback it generates regardless of which ones a partner has implemented; unimplemented callbacks must
+    answer 404.
+
+
+    Delivery semantics (published in the common reference): the receiving endpoint has 3 seconds to respond; on timeout Gorela
+    retries 3 times at 2s / 18s / 50s. Timestamps are GMT+00:00 milliseconds, distances are metres, coordinates are WGS84
+    to >= 6 decimal places.
+
+
+    DERIVED by API Evangelist from https://developer.gorelas.com/api-docs-md/ — verbatim paths, payload fields, types and
+    examples. Barogo publishes no AsyncAPI or OpenAPI of its own.'
+  contact:
+    name: Gorela TAM
+    email: tech_poc@barogo.com
+    url: https://developer.gorelas.com/
+  x-origin:
+  - format: markdown
+    url: https://developer.gorelas.com/api-docs-md/index.md
+    version: '2026-06-23'
+    converter:
+      url: https://apievangelist.com
+      version: pipeline-enrich local-v1
+webhooks:
+  onDeliveryAccepted:
+    post:
+      operationId: onDeliveryAccepted
+      summary: 배달 접수
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/accepted` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 배달 접수
+      x-callback-path: /delivery/accepted
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-4.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                pickupExpectedAt:
+                  type: integer
+                  description: 픽업 예상 일시 (timestamp) *(현장 상황에 따라 ±10분 오차가 있을 수 있습니다)*
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 배달 상태 변경 일시 (timestamp)
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - pickupExpectedAt
+              - changedAt
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  pickupExpectedAt: 1674808200248
+                  changedAt: 1674807600884
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryCardPayments:
+    post:
+      operationId: onDeliveryCardPayments
+      summary: 카드 결제 내역
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/payments` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 카드 결제 내역
+      x-callback-path: /delivery/payments
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-8.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                payments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      paymentMethod:
+                        type: string
+                        description: 결제 수단 (= CARD)
+                      cardCompany:
+                        type: string
+                        maxLength: 30
+                        description: 카드사명
+                      cardNumber:
+                        type: string
+                        maxLength: 20
+                        description: 카드 번호
+                      vanCompany:
+                        type: string
+                        maxLength: 30
+                        description: VAN사명
+                      approvalNumber:
+                        type: string
+                        maxLength: 100
+                        description: 승인 번호
+                      approvalAt:
+                        type: integer
+                        format: int64
+                        description: 승인 일시 (timestamp)
+                      instalment:
+                        type: integer
+                        description: '할부 개월 수 (일시불: 0)'
+                      charge:
+                        type: integer
+                        description: 결제 금액
+                      isCanceled:
+                        type: boolean
+                        description: 결제 취소 여부 결제 목록
+                    required:
+                    - paymentMethod
+                    - cardCompany
+                    - cardNumber
+                    - vanCompany
+                    - approvalNumber
+                    - approvalAt
+                    - instalment
+                    - charge
+                    - isCanceled
+                    title: 결제 데이터
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  payments:
+                  - paymentMethod: CARD
+                    cardCompany: 신한카드
+                    cardNumber: 1111********2222
+                    vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-147
+                    approvalAt: 1674810824156
+                    instalment: 0
+                    charge: 30000
+                    isCanceled: false
+                  - paymentMethod: CARD
+                    cardCompany: KB국민카드
+                    cardNumber: 1234********5678
+                    vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-133
+                    approvalAt: 1674810690156
+                    instalment: 0
+                    charge: 30000
+                    isCanceled: true
+                  - paymentMethod: CARD
+                    cardCompany: KB국민카드
+                    cardNumber: 1234********5678
+                    vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-133
+                    approvalAt: 1674810643156
+                    instalment: 0
+                    charge: 30000
+                    isCanceled: false
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryCashReceipts:
+    post:
+      operationId: onDeliveryCashReceipts
+      summary: 현금영수증 발급 내역
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/cash-receipts` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 현금영수증 발급 내역
+      x-callback-path: /delivery/cash-receipts
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-9.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                cashReceipts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      vanCompany:
+                        type: string
+                        maxLength: 30
+                        description: VAN사명
+                      approvalNumber:
+                        type: string
+                        maxLength: 100
+                        description: 승인 번호
+                      approvalAt:
+                        type: integer
+                        format: int64
+                        description: 승인 일시 (timestamp)
+                      charge:
+                        type: integer
+                        description: 현금영수증 발급 금액
+                      isCanceled:
+                        type: boolean
+                        description: 현금영수증 발급 취소 여부 현금영수증 목록
+                    required:
+                    - vanCompany
+                    - approvalNumber
+                    - approvalAt
+                    - charge
+                    - isCanceled
+                    title: 현금영수증 데이터
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  cashReceipts:
+                  - vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-147
+                    approvalAt: 1674810824156
+                    charge: 30000
+                    isCanceled: false
+                  - vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-133
+                    approvalAt: 1674810690156
+                    charge: 30000
+                    isCanceled: true
+                  - vanCompany: ABC-VAN
+                    approvalNumber: 12345-12-133
+                    approvalAt: 1674810643156
+                    charge: 30000
+                    isCanceled: false
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryChargeChanged:
+    post:
+      operationId: onDeliveryChargeChanged
+      summary: 배달 요금 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/delivery-charge-info` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 배달 정보
+      x-callback-path: /delivery/delivery-charge-info
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-5.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디 **주소 기반 연동 주문인 경우 해당 필드는 제외*
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                totalDeliveryPrice:
+                  type: integer
+                  description: 총 배달 요금
+                deliveryPrice:
+                  type: integer
+                  description: 거리 비례 요금
+                extraCharges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      dataType:
+                        type: string
+                        description: 할증 데이터 종류 (= FIXED)
+                      type:
+                        type: string
+                        description: 할증 종류
+                        enum:
+                        - WEATHER
+                        - AREA
+                        - OVERLOAD
+                        - HOLIDAY
+                        - TIME
+                        - BUSY
+                        - LATE_NIGHT
+                        - VALUABLE
+                        - ADMIN
+                        - ALCOHOLIC
+                        - PROMOTION
+                        - ETC
+                        x-enum-descriptions:
+                          WEATHER: 기상
+                          AREA: 구역
+                          OVERLOAD: 과적
+                          HOLIDAY: 휴일
+                          TIME: 시간
+                          BUSY: 배달 폭증
+                          LATE_NIGHT: 심야
+                          VALUABLE: 귀중
+                          ADMIN: 관리자
+                          ALCOHOLIC: 주류
+                          PROMOTION: 프로모션
+                          ETC: 기타
+                      charge:
+                        type: integer
+                        description: 할증 금액 할증 목록
+                    required:
+                    - dataType
+                    - type
+                    - charge
+                    title: 할증 데이터
+                VATPrice:
+                  type: integer
+                  description: 부가세 금액 (이 금액은 배달 요금에 포함되지 않는 별도의 금액입니다) - `= null` 부가세 없음 - `= 0` 부가세가 있지만 0원 - `>= 1` 부가세가
+                    있으며 해당하는 금액
+                deliveryDistance:
+                  type: integer
+                  description: 배달 거리 (m)
+                delayTime:
+                  type: integer
+                  description: 배달 지연 시간 (분)
+                chargeChangeReason:
+                  type: string
+                  description: 배달 요금 변경 유형
+                  enum:
+                  - OVERLOAD
+                  - CHANGE_DISTANCE
+                  - CHANGE_EXTRA_CHARGE
+                  - ETC
+                  x-enum-descriptions:
+                    OVERLOAD: 과적으로 인하여 변경된 경우
+                    CHANGE_DISTANCE: 배달 거리가 변경된 경우
+                    CHANGE_EXTRA_CHARGE: 할증이 변경된 경우
+                    ETC: 기타 사유로 인해 변경된 경우
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 배달 요금 변경 일시 (timestamp)
+                totalDeliveriesPrice:
+                  type: integer
+                  description: 주문 1건에 연결된 모든 배달들의 요금 합계 (`부가세` 미포함) 주문 제휴사측에서 "1주문 N배달" 구조 관리가 어려운 경우에 총 배달 요금 정산을 위해서 사용될
+                    수 있습니다
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - totalDeliveryPrice
+              - deliveryPrice
+              - VATPrice
+              - deliveryDistance
+              - delayTime
+              - chargeChangeReason
+              - changedAt
+              - totalDeliveriesPrice
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  totalDeliveryPrice: 4000
+                  deliveryPrice: 3500
+                  extraCharges:
+                  - dataType: FIXED
+                    type: WEATHER
+                    charge: 500
+                  VATPrice: 380
+                  deliveryDistance: 1320
+                  delayTime: 10
+                  chargeChangeReason: CHANGE_DISTANCE
+                  changedAt: 1674765197398
+                  totalDeliveriesPrice: 4000
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryDropExpectedAtChanged:
+    post:
+      operationId: onDeliveryDropExpectedAtChanged
+      summary: 드랍 예상 일시 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/drop-expected-at` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 배달 정보
+      x-callback-path: /delivery/drop-expected-at
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-5.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디 **주소 기반 연동 주문인 경우 해당 필드는 제외*
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                dropExpectedAt:
+                  type: integer
+                  description: 드랍 예상 일시 (timestamp) *(현장 상황에 따라 ±10분 오차가 있을 수 있습니다)*
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - dropExpectedAt
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  dropExpectedAt: 1674807900000
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryDropInfoChanged:
+    post:
+      operationId: onDeliveryDropInfoChanged
+      summary: 드랍지 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/drop-info` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 배달 정보
+      x-callback-path: /delivery/drop-info
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-5.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디 **주소 기반 연동 주문인 경우 해당 필드는 제외*
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                dropJibunAddress:
+                  type: string
+                  maxLength: 100
+                  description: 드랍 지번 주소 (`법정동`)
+                dropRoadAddress:
+                  type: string
+                  maxLength: 100
+                  description: 드랍 도로명 주소
+                dropAddressDetail:
+                  type: string
+                  maxLength: 100
+                  description: 드랍 상세 주소
+                dropLocation:
+                  type: object
+                  properties:
+                    latitude:
+                      type: string
+                      description: 위도
+                    longitude:
+                      type: string
+                      description: 경도 드랍지 좌표
+                  required:
+                  - latitude
+                  - longitude
+                  title: 좌표 데이터
+                dropInfoChangeReason:
+                  type: string
+                  description: 드랍지 변경 유형
+                  enum:
+                  - WRONG_RECEIVER_INFO
+                  - ETC
+                  x-enum-descriptions:
+                    WRONG_RECEIVER_INFO: 고객 정보가 정확하지 않아 변경된 경우
+                    ETC: 기타 사유로 인해 변경된 경우
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 드랍지 변경 일시 (timestamp)
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - dropJibunAddress
+              - dropAddressDetail
+              - dropInfoChangeReason
+              - changedAt
+            examples:
+              Request:
+                value:
+                  orderAgencyId: barogo_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: barogo_chicken_store_1
+                  orderId: 190517171824940
+                  deliveryAgencyId: barogo
+                  dropJibunAddress: 서울 강남구 논현동 117
+                  dropRoadAddress: 서울 강남구 언주로134길 32
+                  dropAddressDetail: 5층 505호
+                  dropLocation:
+                    latitude: '37.51123411'
+                    longitude: '127.0332331'
+                  dropInfoChangeReason: WRONG_RECEIVER_INFO
+                  changedAt: 1674765197398
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryDropNear:
+    post:
+      operationId: onDeliveryDropNear
+      summary: 드랍지 곧 도착 알림
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/drop-near` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 드랍지 곧 도착 알림
+      x-callback-path: /delivery/drop-near
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-3.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 곧 도착 이벤트 발생 일시 (timestamp)
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderId
+              - deliveryAgencyId
+              - changedAt
+            examples:
+              Request:
+                value:
+                  orderAgencyId: albert
+                  orderAgencyOrderId: BMO1712193318145
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  changedAt: 1674808522881
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryPickupExpectedAtChanged:
+    post:
+      operationId: onDeliveryPickupExpectedAtChanged
+      summary: 픽업 예상 일시 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/pickup-expected-at` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 배달 정보
+      x-callback-path: /delivery/pickup-expected-at
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-5.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디 **주소 기반 연동 주문인 경우 해당 필드는 제외*
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                pickupExpectedAt:
+                  type: integer
+                  description: 픽업 예상 일시 (timestamp) *(현장 상황에 따라 ±10분 오차가 있을 수 있습니다)*
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - pickupExpectedAt
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  pickupExpectedAt: 1674806400000
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onDeliveryStatusChanged:
+    post:
+      operationId: onDeliveryStatusChanged
+      summary: 배달 상태 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /delivery/status` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로 응답해야
+        합니다.
+      tags:
+      - 배달 상태 변경
+      x-callback-path: /delivery/status
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-1.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+                deliveryStatus:
+                  type: string
+                  description: 배달 상태
+                  enum:
+                  - ALLOCATED
+                  - ALLOCATION_CANCELED
+                  - ALLOCATION_CHANGED
+                  - ARRIVED
+                  - PICKUP_FINISHED
+                  x-enum-descriptions:
+                    ALLOCATED: 라이더 배차
+                    ALLOCATION_CANCELED: 라이더 배차 취소
+                    ALLOCATION_CHANGED: 라이더 배차 변경
+                    ARRIVED: 픽업지 도착
+                    PICKUP_FINISHED: 픽업 완료
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 배달 상태 변경 일시 (timestamp)
+                driverPhone:
+                  type: string
+                  minLength: 8
+                  maxLength: 12
+                  description: 라이더 연락처
+                hubPhone:
+                  type: string
+                  minLength: 8
+                  maxLength: 12
+                  description: 배달 수행 허브 연락처
+                deliveryPrice:
+                  type: integer
+                  description: 거리 비례 요금
+                totalExtraCharge:
+                  type: integer
+                  description: 총 할증 금액
+                extraCharges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      dataType:
+                        type: string
+                        description: 할증 데이터 종류 (= FIXED)
+                      type:
+                        type: string
+                        description: 할증 종류
+                        enum:
+                        - WEATHER
+                        - AREA
+                        - OVERLOAD
+                        - HOLIDAY
+                        - TIME
+                        - BUSY
+                        - LATE_NIGHT
+                        - VALUABLE
+                        - ADMIN
+                        - ALCOHOLIC
+                        - PROMOTION
+                        - ETC
+                        x-enum-descriptions:
+                          WEATHER: 기상
+                          AREA: 구역
+                          OVERLOAD: 과적
+                          HOLIDAY: 휴일
+                          TIME: 시간
+                          BUSY: 배달 폭증
+                          LATE_NIGHT: 심야
+                          VALUABLE: 귀중
+                          ADMIN: 관리자
+                          ALCOHOLIC: 주류
+                          PROMOTION: 프로모션
+                          ETC: 기타
+                      charge:
+                        type: integer
+                        description: 할증 금액 할증 목록
+                    required:
+                    - dataType
+                    - type
+                    - charge
+                    title: 할증 데이터
+                totalDeliveryPrice:
+                  type: integer
+                  description: 총 배달 요금 (deliveryPrice + totalExtraCharge)
+                VATPrice:
+                  type: integer
+                  description: 부가세 금액 (이 금액은 배달 요금에 포함되지 않는 별도의 금액입니다) - `= null` 부가세 없음 - `= 0` 부가세가 있지만 0원 - `>= 1` 부가세가
+                    있으며 해당하는 금액
+                deliveryDistance:
+                  type: integer
+                  description: 배달 거리 (m)
+                dropImageUrl:
+                  type: string
+                  maxLength: 500
+                  description: 비대면 배달 이미지 URL (드랍 완료 시점) (비대면 배달로 주문이 접수된 경우에만 존재)
+                alcoholicBeverageSignImageUrl:
+                  type: string
+                  maxLength: 500
+                  description: 주류 상품 배달 서명 이미지 URL (드랍 완료 시점) (주류 상품 배달로 주문이 접수된 경우에만 존재)
+                totalDeliveriesPrice:
+                  type: integer
+                  description: 주문 1건에 연결된 모든 배달들의 요금 합계 (`부가세` 미포함) 주문 제휴사측에서 "1주문 N배달" 구조 관리가 어려운 경우에 총 배달 요금 정산을 위해서 사용될
+                    수 있습니다
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - deliveryAgencyId
+              - deliveryStatus
+              - changedAt
+              - deliveryPrice
+              - totalExtraCharge
+              - totalDeliveryPrice
+              - VATPrice
+              - deliveryDistance
+              - totalDeliveriesPrice
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: TEST_00000123
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 230127171824940
+                  deliveryAgencyId: barogo
+                  deliveryStatus: PICKUP_FINISHED
+                  changedAt: 1674808522881
+                  driverPhone: 01099999999
+                  hubPhone: '021231234'
+                  totalDeliveryPrice: 3800
+                  deliveryPrice: 3300
+                  totalExtraCharge: 500
+                  extraCharges:
+                  - dataType: FIXED
+                    type: WEATHER
+                    charge: 500
+                  VATPrice: 380
+                  deliveryDistance: 1320
+                  dropImageUrl: null
+                  alcoholicBeverageSignImageUrl: null
+                  totalDeliveriesPrice: 3800
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onOrderAgencyAreaCreated:
+    post:
+      operationId: onOrderAgencyAreaCreated
+      summary: 권역/구역 생성
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /order-agency/area/create` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 주문 제휴사 권역/구역 정보
+      x-callback-path: /order-agency/area/create
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-12.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                feature:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: = "Feature" 고정값
+                    preoperties:
+                      type: object
+                      properties:
+                        areaId:
+                          type: string
+                          x-constraint: '100'
+                          description: 권역/구역 아이디
+                        areaName:
+                          type: string
+                          x-constraint: '200'
+                          description: 권역/구역 이름
+                        areaType:
+                          type: string
+                          x-constraint: '50'
+                          description: 권역/구역 유형
+                          enum:
+                          - DELIVERY_POSSIBLE_AREA
+                          - DELIVERY_IMPOSSIBLE_AREA
+                          - EXTRA_CHARGE_AREA
+                          x-enum-descriptions:
+                            DELIVERY_POSSIBLE_AREA: 배달 가능 권역
+                            DELIVERY_IMPOSSIBLE_AREA: 배달 불가 구역
+                            EXTRA_CHARGE_AREA: 할증 구역
+                      required:
+                      - areaId
+                      - areaName
+                      - areaType
+                    geometry:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: = "Polygon" 고정값
+                        coordinates:
+                          type: array
+                          items:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: number
+                                format: double
+                          description: 좌표 권역/구역
+                      required:
+                      - type
+                      - coordinates
+                  required:
+                  - type
+              required:
+              - orderAgencyId
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  feature:
+                    type: Feature
+                    properties:
+                      areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d
+                      areaType: DELIVERY_POSSIBLE_AREA
+                      areaName: 테스트 권역
+                    geometry:
+                      type: Polygon
+                      coordinates:
+                      - - - 127.03087926803886
+                          - 37.51408656999381
+                        - - 127.02146758744085
+                          - 37.51109732162127
+                        - - 127.0244514673468
+                          - 37.50457346611247
+                        - - 127.01970098768997
+                          - 37.5029525439367
+                        - - 127.02150854924217
+                          - 37.496176662210175
+                        - - 127.02761570058925
+                          - 37.49786928477963
+                        - - 127.02973983826172
+                          - 37.493111453318974
+                        - - 127.03933039172989
+                          - 37.49584771080132
+                        - - 127.03670929291451
+                          - 37.50082210929581
+                        - - 127.04268157616359
+                          - 37.50273023472369
+                        - - 127.06299831976
+                          - 37.50881194144773
+                        - - 127.0602430709071
+                          - 37.51436356478256
+                        - - 127.05708037588343
+                          - 37.52016759719988
+                        - - 127.04124198687562
+                          - 37.51729097936169
+                        - - 127.03087926803886
+                          - 37.51408656999381
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onOrderAgencyAreaDeleted:
+    post:
+      operationId: onOrderAgencyAreaDeleted
+      summary: 권역/구역 삭제
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /order-agency/area/delete` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 주문 제휴사 권역/구역 정보
+      x-callback-path: /order-agency/area/delete
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-12.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                areaId:
+                  type: string
+                  x-constraint: UUID
+                  description: 권역/구역 아이디
+              required:
+              - orderAgencyId
+              - areaId
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onOrderAgencyAreaUpdated:
+    post:
+      operationId: onOrderAgencyAreaUpdated
+      summary: 권역/구역 수정
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /order-agency/area/update` 로 전달됩니다. 연동하지 않은 콜백은 404(Not
+        Found)로 응답해야 합니다.
+      tags:
+      - 주문 제휴사 권역/구역 정보
+      x-callback-path: /order-agency/area/update
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-12.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                feature:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: = "Feature" 고정값
+                    preoperties:
+                      type: object
+                      properties:
+                        areaId:
+                          type: string
+                          x-constraint: '100'
+                          description: 권역/구역 아이디
+                        areaName:
+                          type: string
+                          x-constraint: '200'
+                          description: 권역/구역 이름
+                        areaType:
+                          type: string
+                          x-constraint: '50'
+                          description: 권역/구역 유형
+                          enum:
+                          - DELIVERY_POSSIBLE_AREA
+                          - DELIVERY_IMPOSSIBLE_AREA
+                          - EXTRA_CHARGE_AREA
+                          x-enum-descriptions:
+                            DELIVERY_POSSIBLE_AREA: 배달 가능 권역
+                            DELIVERY_IMPOSSIBLE_AREA: 배달 불가 구역
+                            EXTRA_CHARGE_AREA: 할증 구역
+                      required:
+                      - areaId
+                      - areaName
+                      - areaType
+                    geometry:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: = "Polygon" 고정값
+                        coordinates:
+                          type: array
+                          items:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: number
+                                format: double
+                          description: 좌표 권역/구역
+                      required:
+                      - type
+                      - coordinates
+                  required:
+                  - type
+              required:
+              - orderAgencyId
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  feature:
+                    type: Feature
+                    properties:
+                      areaId: 7e21ff3b-acfa-44bd-bcd4-0ffd31e52a9d
+                      areaType: DELIVERY_POSSIBLE_AREA
+                      areaName: 테스트 권역
+                    geometry:
+                      type: Polygon
+                      coordinates:
+                      - - - 127.0307435202268
+                          - 37.51405056524653
+                        - - 127.02146758744085
+                          - 37.51109732162127
+                        - - 127.0244514673468
+                          - 37.50457346611247
+                        - - 127.01970098768997
+                          - 37.5029525439367
+                        - - 127.02150854924217
+                          - 37.496176662210175
+                        - - 127.02761570058925
+                          - 37.49786928477963
+                        - - 127.02973983826172
+                          - 37.493111453318974
+                        - - 127.03933039172989
+                          - 37.49584771080132
+                        - - 127.03670929291451
+                          - 37.50082210929581
+                        - - 127.04268157616359
+                          - 37.50273023472369
+                        - - 127.04988759168357
+                          - 37.48865368674333
+                        - - 127.06973926962543
+                          - 37.496671609448654
+                        - - 127.06299831976
+                          - 37.50881194144773
+                        - - 127.0602430709071
+                          - 37.51436356478256
+                        - - 127.05708037588343
+                          - 37.52016759719988
+                        - - 127.04124198687562
+                          - 37.51729097936169
+                        - - 127.03912981476645
+                          - 37.5232112875261
+                        - - 127.0337556197211
+                          - 37.52149203066994
+                        - - 127.02808754034471
+                          - 37.51971853879475
+                        - - 127.0307435202268
+                          - 37.51405056524653
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onOrderPaymentInfoChanged:
+    post:
+      operationId: onOrderPaymentInfoChanged
+      summary: 주문 결제 정보 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /order/payment-info` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 주문 결제 정보 변경
+      x-callback-path: /order/payment-info
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-7.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                totalPayPrice:
+                  type: integer
+                  x-constraint: '>= actualPayPrice'
+                  description: 총 결제 금액
+                actualPayPrice:
+                  type: integer
+                  description: 실제 결제 금액
+                prepaidPrice:
+                  type: integer
+                  description: 선결제 금액
+                paymentCashPrice:
+                  type: integer
+                  description: 후불 현금 결제 금액 **(라이더 현장 결제)**
+                paymentCardPrice:
+                  type: integer
+                  description: 후불 카드 결제 금액 **(라이더 현장 결제)**
+                taxFreePayPrice:
+                  type: integer
+                  description: '일회용 컵 반환 보증금 후불 결제 금액 (default: 0)'
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - totalPayPrice
+              - actualPayPrice
+              - prepaidPrice
+              - paymentCashPrice
+              - paymentCardPrice
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyOrderId: gorela_chicken_order_1
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  orderId: 1234
+                  totalPayPrice: 10000
+                  actualPayPrice: 10000
+                  prepaidPrice: 0
+                  paymentCashPrice: 0
+                  paymentCardPrice: 10000
+                  taxFreePayPrice: 0
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onOrderStatusChanged:
+    post:
+      operationId: onOrderStatusChanged
+      summary: 주문 상태 변경
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /order/status` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로 응답해야
+        합니다.
+      tags:
+      - 주문 상태 변경
+      x-callback-path: /order/status
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-2.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyOrderId:
+                  type: string
+                  maxLength: 50
+                  description: 주문 제휴사 주문 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                orderId:
+                  type: integer
+                  format: int64
+                  description: 고릴라 주문 아이디
+                orderStatus:
+                  type: string
+                  description: 주문 상태
+                  enum:
+                  - FINISHED
+                  - CANCELED
+                  x-enum-descriptions:
+                    FINISHED: 완료
+                    CANCELED: 취소
+                changedAt:
+                  type: integer
+                  format: int64
+                  description: 주문 상태 변경 일시 (timestamp)
+                deliveries:
+                  type: object
+                  properties:
+                    deliveryAgencyId:
+                      type: string
+                      maxLength: 30
+                      description: 배달대행사 아이디
+                    deliveryStatus:
+                      type: string
+                      description: 배달 상태
+                      enum:
+                      - ENUM
+                      - DROP_FINISHED
+                      - CANCELED
+                      - REJECTED
+                      - FAILED
+                      x-enum-descriptions:
+                        ENUM: 설명
+                        DROP_FINISHED: 드랍 완료
+                        CANCELED: 취소
+                        REJECTED: 거절
+                        FAILED: 실패
+                    createdAt:
+                      type: integer
+                      format: int64
+                      description: 배달 생성 일시 (timestamp)
+                    totalDeliveryPrice:
+                      type: integer
+                      description: 총 배달 요금 (deliveryPrice + totalExtraCharge)
+                    deliveryPrice:
+                      type: integer
+                      description: 거리 비례 요금
+                    totalExtraCharge:
+                      type: integer
+                      description: 총 할증 금액
+                    extraCharges:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          dataType:
+                            type: string
+                            description: 할증 데이터 종류 (= FIXED)
+                          type:
+                            type: string
+                            description: 할증 종류
+                            enum:
+                            - WEATHER
+                            - AREA
+                            - OVERLOAD
+                            - HOLIDAY
+                            - TIME
+                            - BUSY
+                            - LATE_NIGHT
+                            - VALUABLE
+                            - ADMIN
+                            - ALCOHOLIC
+                            - PROMOTION
+                            - ETC
+                            x-enum-descriptions:
+                              WEATHER: 기상
+                              AREA: 구역
+                              OVERLOAD: 과적
+                              HOLIDAY: 휴일
+                              TIME: 시간
+                              BUSY: 배달 폭증
+                              LATE_NIGHT: 심야
+                              VALUABLE: 귀중
+                              ADMIN: 관리자
+                              ALCOHOLIC: 주류
+                              PROMOTION: 프로모션
+                              ETC: 기타
+                          charge:
+                            type: integer
+                            description: 할증 금액 할증 목록
+                        required:
+                        - dataType
+                        - type
+                        title: 할증 데이터
+                    VATPrice:
+                      type: integer
+                      description: 부가세 금액 (이 금액은 배달 요금에 포함되지 않는 별도의 금액입니다) - `= null` 부가세 없음 - `= 0` 부가세가 있지만 0원 - `>= 1`
+                        부가세가 있으며 해당하는 금액
+                    deliveryDistance:
+                      type: integer
+                      description: 배달 거리 (m)
+                    driverPhone:
+                      type: string
+                      minLength: 8
+                      maxLength: 12
+                      description: 라이더 연락처
+                    hubPhone:
+                      type: string
+                      minLength: 8
+                      maxLength: 12
+                      description: 배달 수행 허브 연락처
+                    dropImageUrl:
+                      type: string
+                      maxLength: 500
+                      description: 비대면 배달 이미지 URL (드랍 완료 시점) (비대면 배달로 주문이 접수된 경우에만 존재)
+                    alcoholicBeverageSignImageUrl:
+                      type: string
+                      maxLength: 500
+                      description: 주류 상품 배달 서명 이미지 URL (드랍 완료 시점) (주류 상품 배달로 주문이 접수된 경우에만 존재)
+                    cancelType:
+                      type: string
+                      description: 배달 취소 유형
+                      enum:
+                      - INVALID_AREA
+                      - OVER_CAPACITY
+                      - CHANGE_STORE
+                      - BAD_WEATHER
+                      - CLOSE_AGENCY
+                      - INSUFFICIENT_DEPOSIT
+                      - WRONG_REQUEST
+                      - WRONG_RECEIVER_INFO
+                      - NOT_ANSWER_RECEIVER
+                      - CHANGE_CUSTOMER_MIND
+                      - DAMAGE_PRODUCT
+                      - SOLD_OUT
+                      - TIMEOUT_CANCEL
+                      - UNDERAGE
+                      - DELAY_DELIVERY
+                      - CANCEL_BY_STORE
+                      - CANCEL_BY_CUSTOMER
+                      - COMPLAIN_BY_CUSTOMER
+                      - CANCEL_BY_SWITCH_SELF_DELIVERY
+                      - LONG_TERM_UNALLOCATE
+                      - ETC
+                      x-enum-descriptions:
+                        INVALID_AREA: 배달할 수 없는 구역으로 배달이 취소된 경우
+                        OVER_CAPACITY: 배달을 수행할 수 있는 라이더가 부족하여 배달이 취소된 경우
+                        CHANGE_STORE: 다른 상점으로 배달 수행을 이관하는 경우
+                        BAD_WEATHER: 배달 불가능한 날씨로 배달이 취소된 경우
+                        CLOSE_AGENCY: 배달대행사의 영업이 종료되어 배달이 취소된 경우
+                        INSUFFICIENT_DEPOSIT: 상점의 예치금이 부족하여 배달이 취소된 경우
+                        WRONG_REQUEST: 배달 접수 후 잘못된 정보로 배달이 취소된 경우
+                        WRONG_RECEIVER_INFO: 고객 정보가 정확하지 않아 배달이 취소된 경우
+                        NOT_ANSWER_RECEIVER: 고객과 연락이 되지 않아 배달이 취소된 경우
+                        CHANGE_CUSTOMER_MIND: 고객의 변심으로 배달이 취소된 경우
+                        DAMAGE_PRODUCT: 배달 상품이 손상되어 배달이 취소된 경우
+                        SOLD_OUT: 상품이 품절되어 배달이 취소된 경우
+                        TIMEOUT_CANCEL: 배달대행사에서 장기 배차 지연으로 배달이 자동으로 취소된 경우
+                        UNDERAGE: 고객이 미성년자로 판단되어 배달이 취소된 경우
+                        DELAY_DELIVERY: 배달 지연으로 배달이 취소된 경우
+                        CANCEL_BY_STORE: 상점 요청으로 배달이 취소된 경우
+                        CANCEL_BY_CUSTOMER: 고객 요청으로 배달이 취소된 경우
+                        COMPLAIN_BY_CUSTOMER: 고객 불만 요청으로 배달이 취소된 경우
+                        CANCEL_BY_SWITCH_SELF_DELIVERY: 자체 배달로 전환되어 배달이 취소된 경우
+                        LONG_TERM_UNALLOCATE: 장기 미배차로 배달이 취소된 경우
+                        ETC: 기타 사유로 배달이 취소된 경우
+                    cancelReason:
+                      type: string
+                      maxLength: 250
+                      description: 배달 취소 사유
+                    cancelFee:
+                      type: integer
+                      description: 배달 취소 수수료 배달 목록 *(1개만 존재)*
+                  required:
+                  - deliveryAgencyId
+                  - deliveryStatus
+                  - createdAt
+                  - cancelFee
+              required:
+              - orderAgencyId
+              - orderAgencyOrderId
+              - orderAgencyStoreId
+              - orderId
+              - orderStatus
+              - changedAt
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreAreaCreated:
+    post:
+      operationId: onStoreAreaCreated
+      summary: 권역/구역 생성
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /store/areas/create` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 상점 권역/구역 정보
+      x-callback-path: /store/areas/create
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-11.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+                features:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: = "Feature" 고정값
+                      preoperties:
+                        type: object
+                        properties:
+                          areaId:
+                            type: string
+                            x-constraint: '100'
+                            description: 권역/구역 아이디
+                          areaName:
+                            type: string
+                            x-constraint: '200'
+                            description: 권역/구역 이름
+                          areaType:
+                            type: string
+                            x-constraint: '50'
+                            description: 권역/구역 유형
+                            enum:
+                            - DELIVERY_POSSIBLE_AREA
+                            - DELIVERY_IMPOSSIBLE_AREA
+                            - EXTRA_CHARGE_AREA
+                            x-enum-descriptions:
+                              DELIVERY_POSSIBLE_AREA: 배달 가능 권역
+                              DELIVERY_IMPOSSIBLE_AREA: 배달 불가 구역
+                              EXTRA_CHARGE_AREA: 할증 구역
+                          pickupExtraCharge:
+                            type: integer
+                            x-constraint: 0 >=
+                            description: 픽업 할증 금액 (유형이 할증 구역인 경우 required)
+                          dropExtraCharge:
+                            type: integer
+                            x-constraint: 0 >=
+                            description: 드랍 할증 금액 (유형이 할증 구역인 경우 required)
+                        required:
+                        - areaId
+                        - areaName
+                        - areaType
+                        - dropExtraCharge
+                      geometry:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            description: = "Polygon" 고정값
+                          coordinates:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: array
+                                items:
+                                  type: number
+                                  format: double
+                            description: 좌표 권역/구역 목록
+                        required:
+                        - type
+                        - coordinates
+                    required:
+                    - type
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  storeId: 12223
+                  features:
+                  - type: Feature
+                    properties:
+                      areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+                      areaName: 상점1 권역
+                      areaType: DELIVERY_POSSIBLE_AREA
+                    geometry:
+                      type: Polygon
+                      coordinates:
+                      - - - 127.03087926803886
+                          - 37.51408656999381
+                        - - 127.02146758744085
+                          - 37.51109732162127
+                        - - 127.0244514673468
+                          - 37.50457346611247
+                        - - 127.01970098768997
+                          - 37.5029525439367
+                        - - 127.02150854924217
+                          - 37.496176662210175
+                        - - 127.02761570058925
+                          - 37.49786928477963
+                        - - 127.02973983826172
+                          - 37.493111453318974
+                        - - 127.03933039172989
+                          - 37.49584771080132
+                        - - 127.03670929291451
+                          - 37.50082210929581
+                        - - 127.04268157616359
+                          - 37.50273023472369
+                        - - 127.06299831976
+                          - 37.50881194144773
+                        - - 127.0602430709071
+                          - 37.51436356478256
+                        - - 127.05708037588343
+                          - 37.52016759719988
+                        - - 127.04124198687562
+                          - 37.51729097936169
+                        - - 127.03087926803886
+                          - 37.51408656999381
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreAreaDeleted:
+    post:
+      operationId: onStoreAreaDeleted
+      summary: 권역/구역 삭제
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /store/areas/delete` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 상점 권역/구역 정보
+      x-callback-path: /store/areas/delete
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-11.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+                areaIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 권역/구역 아이디 목록
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+              - areaIds
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  storeId: 12223
+                  areaIds:
+                  - a23eeed7-6319-4136-b7de-52a57d6a15e2
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreAreaUpdated:
+    post:
+      operationId: onStoreAreaUpdated
+      summary: 권역/구역 수정
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /store/areas/update` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 상점 권역/구역 정보
+      x-callback-path: /store/areas/update
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-11.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+                features:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: = "Feature" 고정값
+                      preoperties:
+                        type: object
+                        properties:
+                          areaId:
+                            type: string
+                            x-constraint: '100'
+                            description: 권역/구역 아이디
+                          areaName:
+                            type: string
+                            x-constraint: '200'
+                            description: 권역/구역 이름
+                          areaType:
+                            type: string
+                            x-constraint: '50'
+                            description: 권역/구역 유형
+                            enum:
+                            - DELIVERY_POSSIBLE_AREA
+                            - DELIVERY_IMPOSSIBLE_AREA
+                            - EXTRA_CHARGE_AREA
+                            x-enum-descriptions:
+                              DELIVERY_POSSIBLE_AREA: 배달 가능 권역
+                              DELIVERY_IMPOSSIBLE_AREA: 배달 불가 구역
+                              EXTRA_CHARGE_AREA: 할증 구역
+                          pickupExtraCharge:
+                            type: integer
+                            x-constraint: 0 >=
+                            description: 픽업 할증 금액 (유형이 할증 구역인 경우 required)
+                          dropExtraCharge:
+                            type: integer
+                            x-constraint: 0 >=
+                            description: 드랍 할증 금액 (유형이 할증 구역인 경우 required) 권역/구역 정보
+                        required:
+                        - areaId
+                        - areaName
+                        - areaType
+                        - dropExtraCharge
+                      geometry:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            description: = "Polygon" 고정값
+                          coordinates:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: array
+                                items:
+                                  type: number
+                                  format: double
+                            description: 좌표 데이터 권역/구역 목록
+                        required:
+                        - type
+                        - coordinates
+                    required:
+                    - type
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+            examples:
+              Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  storeId: 12223
+                  features:
+                  - type: Feature
+                    properties:
+                      areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+                      areaName: 상점1 권역
+                      areaType: DELIVERY_POSSIBLE_AREA
+                    geometry:
+                      type: Polygon
+                      coordinates:
+                      - - - 127.0307435202268
+                          - 37.51405056524653
+                        - - 127.02146758744085
+                          - 37.51109732162127
+                        - - 127.0244514673468
+                          - 37.50457346611247
+                        - - 127.01970098768997
+                          - 37.5029525439367
+                        - - 127.02150854924217
+                          - 37.496176662210175
+                        - - 127.02761570058925
+                          - 37.49786928477963
+                        - - 127.02973983826172
+                          - 37.493111453318974
+                        - - 127.03933039172989
+                          - 37.49584771080132
+                        - - 127.03670929291451
+                          - 37.50082210929581
+                        - - 127.04268157616359
+                          - 37.50273023472369
+                        - - 127.04988759168357
+                          - 37.48865368674333
+                        - - 127.06973926962543
+                          - 37.496671609448654
+                        - - 127.06299831976
+                          - 37.50881194144773
+                        - - 127.0602430709071
+                          - 37.51436356478256
+                        - - 127.05708037588343
+                          - 37.52016759719988
+                        - - 127.04124198687562
+                          - 37.51729097936169
+                        - - 127.03912981476645
+                          - 37.5232112875261
+                        - - 127.0337556197211
+                          - 37.52149203066994
+                        - - 127.02808754034471
+                          - 37.51971853879475
+                        - - 127.0307435202268
+                          - 37.51405056524653
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreDeliveryDisabled:
+    post:
+      operationId: onStoreDeliveryDisabled
+      summary: 배달 중단
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /stores/delivery-disable` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 배달 중단 / 해제
+      x-callback-path: /stores/delivery-disable
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-6.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStores:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      orderAgencyStoreId:
+                        type: string
+                        maxLength: 100
+                        description: 주문 제휴사 상점 아이디
+                      reason:
+                        type: string
+                        description: 배달 중단 유형 배달 중단 상점 목록
+                        enum:
+                        - OVER_CAPACITY
+                        - BAD_WEATHER
+                        - CLOSE_AGENCY
+                        - CLOSE_STORE
+                        - DELIVERY_DISABLED
+                        x-enum-descriptions:
+                          OVER_CAPACITY: 배달을 수행할 수 있는 라이더가 부족하여 배달이 거절된 경우
+                          BAD_WEATHER: 배달 불가능한 날씨로 인해 배달이 거절된 경우
+                          CLOSE_AGENCY: 배달대행사의 영업이 종료되어 배달이 거절된 경우
+                          CLOSE_STORE: 상점의 영업이 종료되어 배달이 거절된 경우
+                          DELIVERY_DISABLED: 기타 사유로 인해 상점이 배달 중단 상태인 경우
+                    required:
+                    - orderAgencyStoreId
+                    - reason
+                    title: 배달 중단 상점 데이터
+              required:
+              - orderAgencyId
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStores:
+                  - orderAgencyStoreId: gorela_chicken_store_12
+                    reason: BAD_WEATHER
+                  - orderAgencyStoreId: gorela_chicken_store_23
+                    reason: BAD_WEATHER
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreDeliveryEnabled:
+    post:
+      operationId: onStoreDeliveryEnabled
+      summary: 배달 중단 해제
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /stores/delivery-enable` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 배달 중단 / 해제
+      x-callback-path: /stores/delivery-enable
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-6.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 배달 수행 중단이 해제된 주문 제휴사의 상점 아이디 목록
+              required:
+              - orderAgencyId
+              - orderAgencyStoreIds
+            examples:
+              Request:
+                value:
+                  orderAgencyId: barogo_chicken
+                  orderAgencyStoreIds:
+                  - gorela_chicken_store_12
+                  - gorela_chicken_store_23
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+  onStoreDepositCharged:
+    post:
+      operationId: onStoreDepositCharged
+      summary: 상점 예치금 충전
+      description: 고릴라 → 주문 제휴사 콜백. 주문 제휴사가 구현한 콜백 베이스 URL에 `POST /store/deposit-info` 로 전달됩니다. 연동하지 않은 콜백은 404(Not Found)로
+        응답해야 합니다.
+      tags:
+      - 상점 예치금 충전
+      x-callback-path: /store/deposit-info
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/callback-10.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+                addedDeposit:
+                  type: integer
+                  description: 충전된 예치금 금액
+                afterDeposit:
+                  type: integer
+                  description: 충전 후 예치금 잔액
+                beforeDeposit:
+                  type: integer
+                  description: 충전 전 예치금 잔액
+                deliveryAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 배달대행사 아이디
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+              - addedDeposit
+              - afterDeposit
+              - beforeDeposit
+              - deliveryAgencyId
+            examples:
+              Request:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: gorela_chicken_store_1
+                  storeId: 1220
+                  addedDeposit: 100000
+                  afterDeposit: 150000
+                  beforeDeposit: 50000
+                  deliveryAgencyId: barogo
+      responses:
+        '200':
+          description: 콜백 수신 성공. 응답은 최대 3초까지만 대기하며, 타임아웃 시 2초 / 18초 / 50초 간격으로 총 3회 재시도합니다.
+        '404':
+          description: 연동하지 않은 콜백. 주문 제휴사는 미연동 콜백에 404로 응답합니다.
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      title: 에러 응답 데이터
+      description: Gorela error envelope. Published at https://developer.gorelas.com/api-docs-md/common-doc.md
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP 상태 코드
+        error:
+          type: object
+          properties:
+            category:
+              type: string
+              description: 에러 카테고리 (errorCategory)
+            errorCode:
+              type: string
+              description: 에러 코드
+            message:
+              type: string
+              description: 에러 메세지
+          required:
+          - category
+          - errorCode
+          - message
+      required:
+      - statusCode
+      - error

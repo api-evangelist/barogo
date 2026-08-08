@@ -1,0 +1,406 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/index.md
+docs: https://developer.gorelas.com/api-doc/callback
+spec_type: Webhooks
+asyncapi_published: false
+note: Barogo publishes no AsyncAPI document. It does publish a complete, typed webhook reference for the 20 callbacks
+  Gorela POSTs to an order agency's own endpoints. This is that catalog, transcribed from the provider's reference;
+  the machine-readable payload schemas are carried in openapi/barogo-gorela-callbacks-openapi.yml as OpenAPI 3.1
+  webhooks.
+direction: gorela-to-partner
+transport:
+  protocol: https
+  method: POST
+  content_type: application/json
+  endpoint_ownership: The order agency hosts the callback base URL; Gorela appends the documented path.
+delivery_semantics:
+  response_deadline_ms: 3000
+  retry_count: 3
+  retry_schedule_seconds:
+  - 2
+  - 18
+  - 50
+  unimplemented_response: 404
+  sends_all_events: true
+  ordering_guaranteed: false
+  note: 고릴라는 기본적으로 발생되는 모든 콜백을 주문 제휴사에게 전달합니다. Payment and cash-receipt callbacks always carry the full cumulative
+    list (including cancellations), never a single delta, and their order against the completion callback is not
+    guaranteed.
+security:
+  signature: null
+  shared_secret: null
+  mtls: false
+  note: No callback signing or verification scheme is published. IP allow-listing is available on request via tech_poc@barogo.com.
+batching:
+  note: 배달 중단 / 해제 store lists are chunked 20 stores per notification.
+event_count: 20
+events:
+- event: onDeliveryStatusChanged
+  name: 배달 상태 변경
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/status
+  integration: recommended
+  doc_section: 배달 상태 변경
+  payload_fields: 21
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - deliveryStatus
+  - changedAt
+  - driverPhone
+  - hubPhone
+  - deliveryPrice
+  - totalExtraCharge
+  - extraCharges
+  - totalDeliveryPrice
+  - VATPrice
+  - deliveryDistance
+  - dropImageUrl
+  - alcoholicBeverageSignImageUrl
+  - totalDeliveriesPrice
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryStatusChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-1.md
+- event: onOrderStatusChanged
+  name: 주문 상태 변경
+  group: order
+  delivery: webhook
+  method: POST
+  path: /order/status
+  integration: required
+  doc_section: 주문 상태 변경
+  payload_fields: 26
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - orderStatus
+  - changedAt
+  - deliveries
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onOrderStatusChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-2.md
+- event: onDeliveryDropNear
+  name: 드랍지 곧 도착 알림
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/drop-near
+  integration: optional
+  doc_section: 드랍지 곧 도착 알림
+  payload_fields: 5
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderId
+  - deliveryAgencyId
+  - changedAt
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryDropNear
+  source: https://developer.gorelas.com/api-docs-md/callback-3.md
+- event: onDeliveryAccepted
+  name: 배달 접수
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/accepted
+  integration: recommended
+  doc_section: 배달 접수
+  payload_fields: 7
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - pickupExpectedAt
+  - changedAt
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryAccepted
+  source: https://developer.gorelas.com/api-docs-md/callback-4.md
+- event: onDeliveryPickupExpectedAtChanged
+  name: 픽업 예상 일시 변경
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/pickup-expected-at
+  integration: required
+  doc_section: 배달 정보
+  payload_fields: 6
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - pickupExpectedAt
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryPickupExpectedAtChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+- event: onDeliveryDropExpectedAtChanged
+  name: 드랍 예상 일시 변경
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/drop-expected-at
+  integration: optional
+  doc_section: 배달 정보
+  payload_fields: 6
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - dropExpectedAt
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryDropExpectedAtChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+- event: onDeliveryChargeChanged
+  name: 배달 요금 변경
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/delivery-charge-info
+  integration: recommended
+  doc_section: 배달 정보
+  payload_fields: 17
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - totalDeliveryPrice
+  - deliveryPrice
+  - extraCharges
+  - VATPrice
+  - deliveryDistance
+  - delayTime
+  - chargeChangeReason
+  - changedAt
+  - totalDeliveriesPrice
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryChargeChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+- event: onDeliveryDropInfoChanged
+  name: 드랍지 변경
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/drop-info
+  integration: optional
+  doc_section: 배달 정보
+  payload_fields: 13
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - deliveryAgencyId
+  - dropJibunAddress
+  - dropRoadAddress
+  - dropAddressDetail
+  - dropLocation
+  - dropInfoChangeReason
+  - changedAt
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryDropInfoChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-5.md
+- event: onStoreDeliveryDisabled
+  name: 배달 중단
+  group: store
+  delivery: webhook
+  method: POST
+  path: /stores/delivery-disable
+  integration: optional
+  doc_section: 배달 중단 / 해제
+  payload_fields: 4
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStores
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreDeliveryDisabled
+  source: https://developer.gorelas.com/api-docs-md/callback-6.md
+- event: onStoreDeliveryEnabled
+  name: 배달 중단 해제
+  group: store
+  delivery: webhook
+  method: POST
+  path: /stores/delivery-enable
+  integration: optional
+  doc_section: 배달 중단 / 해제
+  payload_fields: 2
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStoreIds
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreDeliveryEnabled
+  source: https://developer.gorelas.com/api-docs-md/callback-6.md
+- event: onOrderPaymentInfoChanged
+  name: 주문 결제 정보 변경
+  group: order
+  delivery: webhook
+  method: POST
+  path: /order/payment-info
+  integration: optional
+  doc_section: 주문 결제 정보 변경
+  payload_fields: 10
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - totalPayPrice
+  - actualPayPrice
+  - prepaidPrice
+  - paymentCashPrice
+  - paymentCardPrice
+  - taxFreePayPrice
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onOrderPaymentInfoChanged
+  source: https://developer.gorelas.com/api-docs-md/callback-7.md
+- event: onDeliveryCardPayments
+  name: 카드 결제 내역
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/payments
+  integration: recommended
+  doc_section: 카드 결제 내역
+  payload_fields: 14
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - payments
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryCardPayments
+  source: https://developer.gorelas.com/api-docs-md/callback-8.md
+- event: onDeliveryCashReceipts
+  name: 현금영수증 발급 내역
+  group: delivery
+  delivery: webhook
+  method: POST
+  path: /delivery/cash-receipts
+  integration: recommended
+  doc_section: 현금영수증 발급 내역
+  payload_fields: 10
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyOrderId
+  - orderAgencyStoreId
+  - orderId
+  - cashReceipts
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onDeliveryCashReceipts
+  source: https://developer.gorelas.com/api-docs-md/callback-9.md
+- event: onStoreDepositCharged
+  name: 상점 예치금 충전
+  group: store
+  delivery: webhook
+  method: POST
+  path: /store/deposit-info
+  integration: optional
+  doc_section: 상점 예치금 충전
+  payload_fields: 7
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStoreId
+  - storeId
+  - addedDeposit
+  - afterDeposit
+  - beforeDeposit
+  - deliveryAgencyId
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreDepositCharged
+  source: https://developer.gorelas.com/api-docs-md/callback-10.md
+- event: onStoreAreaCreated
+  name: 권역/구역 생성
+  group: store
+  delivery: webhook
+  method: POST
+  path: /store/areas/create
+  integration: optional
+  doc_section: 상점 권역/구역 정보
+  payload_fields: 14
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStoreId
+  - storeId
+  - features
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreAreaCreated
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+- event: onStoreAreaUpdated
+  name: 권역/구역 수정
+  group: store
+  delivery: webhook
+  method: POST
+  path: /store/areas/update
+  integration: optional
+  doc_section: 상점 권역/구역 정보
+  payload_fields: 14
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStoreId
+  - storeId
+  - features
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreAreaUpdated
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+- event: onStoreAreaDeleted
+  name: 권역/구역 삭제
+  group: store
+  delivery: webhook
+  method: POST
+  path: /store/areas/delete
+  integration: optional
+  doc_section: 상점 권역/구역 정보
+  payload_fields: 4
+  top_level_fields:
+  - orderAgencyId
+  - orderAgencyStoreId
+  - storeId
+  - areaIds
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onStoreAreaDeleted
+  source: https://developer.gorelas.com/api-docs-md/callback-11.md
+- event: onOrderAgencyAreaCreated
+  name: 권역/구역 생성
+  group: order-agency
+  delivery: webhook
+  method: POST
+  path: /order-agency/area/create
+  integration: optional
+  doc_section: 주문 제휴사 권역/구역 정보
+  payload_fields: 10
+  top_level_fields:
+  - orderAgencyId
+  - feature
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onOrderAgencyAreaCreated
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+- event: onOrderAgencyAreaUpdated
+  name: 권역/구역 수정
+  group: order-agency
+  delivery: webhook
+  method: POST
+  path: /order-agency/area/update
+  integration: optional
+  doc_section: 주문 제휴사 권역/구역 정보
+  payload_fields: 10
+  top_level_fields:
+  - orderAgencyId
+  - feature
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onOrderAgencyAreaUpdated
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+- event: onOrderAgencyAreaDeleted
+  name: 권역/구역 삭제
+  group: order-agency
+  delivery: webhook
+  method: POST
+  path: /order-agency/area/delete
+  integration: optional
+  doc_section: 주문 제휴사 권역/구역 정보
+  payload_fields: 2
+  top_level_fields:
+  - orderAgencyId
+  - areaId
+  schema: openapi/barogo-gorela-callbacks-openapi.yml#/webhooks/onOrderAgencyAreaDeleted
+  source: https://developer.gorelas.com/api-docs-md/callback-12.md
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/callback-1.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8

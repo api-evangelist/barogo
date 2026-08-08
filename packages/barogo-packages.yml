@@ -1,0 +1,71 @@
+generated: '2026-08-06'
+method: searched
+source: https://registry.npmjs.org/-/v1/search?text=gorela
+sdk_count: 0
+note: >-
+  Barogo ships no client SDK in any language. The one first-party package it publishes is an
+  MCP documentation server, not a client library — it cannot call the Gorela API. Integrators
+  write their own HTTP client against the reference. Registries probed 2026-08-06: npm, PyPI,
+  Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist, crates.io.
+packages:
+  - language: typescript
+    registry: npm
+    name: gorela-developer-mcp-server
+    version: 1.0.0
+    url: https://www.npmjs.com/package/gorela-developer-mcp-server
+    install: npx gorela-developer-mcp-server
+    repository: https://github.com/BarogoDevelopers/gorela-developer-mcp-server
+    license: MIT
+    author: BAROGO R&D
+    published: '2025-04-29'
+    official: true
+    kind: mcp-server
+    is_client_sdk: false
+    description: 고릴라(Gorela) 연동 개발자를 위한 개발자 사이트 API 문서 제공 MCP 서버
+registries_probed:
+  - registry: npm
+    query: gorela
+    result: 1 first-party package (gorela-developer-mcp-server)
+  - registry: npm
+    query: barogo
+    result: no first-party client library
+  - registry: pypi
+    name: barogo
+    status: 404
+  - registry: pypi
+    name: gorela
+    status: 404
+  - registry: maven-central
+    result: none found
+  - registry: nuget
+    result: none found
+  - registry: rubygems
+    result: none found
+  - registry: packagist
+    result: none found
+  - registry: crates.io
+    result: none found
+  - registry: pkg.go.dev
+    result: none found
+github:
+  organizations:
+    - org: BarogoDevelopers
+      url: https://github.com/BarogoDevelopers
+      public_repos: 2
+      note: The company's public engineering org — the MCP server plus a validation-rules repo.
+    - org: barogo
+      url: https://github.com/barogo
+      public_repos: 0
+      note: Name held, nothing published.
+  repos:
+    - name: BarogoDevelopers/gorela-developer-mcp-server
+      description: 고릴라(Gorela) 연동 개발자를 위한 개발자 사이트 API 문서 제공 MCP 서버
+      language: TypeScript
+    - name: BarogoDevelopers/barogo-validation-rules
+      description: Barogo validation rules
+      language: JavaScript
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://registry.npmjs.org/gorela-developer-mcp-server
+  http_status: 200
+  content_type: application/json

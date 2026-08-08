@@ -1,0 +1,69 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/index.md
+docs: https://developer.gorelas.com/linkage
+summary:
+  types: [http]
+  http_schemes: [bearer]
+  api_key_in: [header]
+  oauth2_flows: []
+  token_model: static-api-key
+schemes:
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    in: header
+    header: Authorization
+    format: 'Authorization: Bearer {API_Key}'
+    description: >-
+      고릴라는 API Key 기반으로 접근 권한을 확인합니다. Gorela authenticates every request with a
+      long-lived API key presented as an HTTP bearer token. There is no OAuth, no OIDC, no
+      token exchange and no refresh flow — the key itself is the credential.
+    sources:
+      - openapi/barogo-gorela-openapi.yml
+      - https://developer.gorelas.com/api-docs-md/index.md
+issuance:
+  process: >-
+    Keys are not self-serve. Onboarding runs: (1) commercial agreement with a Barogo sales /
+    operations owner, (2) sign up on the Gorela developer site, (3) register the order-agency
+    entity under 연동 관리 (linkage), (4) issue an API key from that console.
+  console: https://developer.gorelas.com/linkage
+  prerequisite: 제휴 협의 — a signed partner agreement precedes key issuance.
+identity_fields:
+  - field: orderAgencyId
+    description: The order agency's own identifier inside Gorela; scopes every request and callback.
+  - field: orderAgencyStoreId
+    description: >-
+      The partner's own store key, mapped 1:1 to a Gorela storeId. Store-based operations
+      require this mapping to exist before an order can be accepted.
+failure_modes:
+  - code: EXPIRED_API_KEY
+    status: 401
+    description: API Key의 유효기간이 만료되었거나, 삭제된 경우 — keys have a validity period and can be revoked.
+  - code: VERIFY_API_KEY_FAIL
+    status: 401
+    description: API Key 검증에 실패한 경우.
+  - code: ROLE_DENY
+    status: 401
+    description: >-
+      권한이 없는 API를 요청한 경우 — keys carry a role. Gorela does enforce per-key authorization,
+      but it publishes no scope or permission reference, so the role surface is not
+      externally enumerable.
+callback_authentication:
+  documented: false
+  note: >-
+    The 20 Gorela → partner callbacks are plain POSTs. The published reference documents no
+    signature header, shared secret, mTLS or replay window for inbound callbacks; it offers
+    IP allow-listing on request (고릴라 Outbound) as the only stated control. An integrator
+    should treat callback bodies as unauthenticated and confirm state with a read operation.
+  ip_allowlist_contact: tech_poc@barogo.com
+gaps:
+  - No OAuth 2.0 / OIDC surface, so no delegated authorization and no per-user consent.
+  - No published scope or permission reference, despite a ROLE_DENY error code implying roles exist.
+  - No documented key rotation procedure or key lifetime.
+  - No callback signing scheme published.
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/index.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8

@@ -1,0 +1,206 @@
+generated: '2026-08-06'
+method: derived
+source: mcp/barogo-mcp.yml + openapi/barogo-gorela-openapi.yml
+note: 'Barogo ships a first-party MCP server, but it is a documentation reader, not an API surface. Its one tool
+  fetches markdown pages; it binds to no Gorela operation. So this crosswalk has an empty crosswalk[] by construction
+  and a rest_only[] that contains the ENTIRE API. That is the finding: Barogo''s agent surface can read about the
+  API but cannot call it.'
+surfaces:
+  openapi:
+    file: openapi/barogo-gorela-openapi.yml
+    operations: 21
+    published_by_provider: false
+    note: Derived by API Evangelist from Barogo's published markdown reference; Barogo publishes no OpenAPI.
+  webhooks:
+    file: openapi/barogo-gorela-callbacks-openapi.yml
+    events: 20
+    gated: false
+  graphql: null
+  mcp:
+    server: gorela-developer-mcp-server
+    transport: stdio
+    hosted: false
+    tools_list_gated: false
+    note: Tool set read from the published source at github.com/BarogoDevelopers/gorela-developer-mcp-server/blob/main/src/index.ts
+      — no live tools/list needed because the server is local stdio, not a remote endpoint.
+crosswalk: []
+mcp_only:
+- tool: fetchGorelaApiDoc
+  reason: Retrieves developer documentation from https://developer.gorelas.com/api-docs-md/. It is not backed by
+    any Gorela API operation and performs no action against a merchant, order or delivery.
+rest_only:
+- operationId: getStoreAreas
+  method: GET
+  path: /api/order-agency-stores/{orderAgencyStoreId}/areas
+  summary: 상점 권역/구역 조회
+  tag: Areas
+- operationId: getDeliveryAgencyConditions
+  method: GET
+  path: /api/delivery-conditions
+  summary: 배달대행사 상태 조회
+  tag: Delivery
+- operationId: getStoreDepositInfo
+  method: GET
+  path: /api/deposit-infos
+  summary: 상점 예치금 조회
+  tag: Deposits
+- operationId: cancelOrder
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/status/cancel
+  summary: 주문 취소
+  tag: Orders
+- operationId: checkDeliveryPossible
+  method: POST
+  path: /api/delivery-possible
+  summary: 배달 가능 여부 및 요금 조회
+  tag: Orders
+- operationId: checkFlexibleDeliveryPossible
+  method: POST
+  path: /api/flexible/delivery-possible
+  summary: 배달 가능 여부 및 요금 조회
+  tag: Orders
+- operationId: createFlexibleOrder
+  method: POST
+  path: /api/flexible/orders
+  summary: 주문 접수
+  tag: Orders
+- operationId: createOrder
+  method: POST
+  path: /api/orders
+  summary: 주문 접수 / 주문 접수 - ACCEPTED_ORDER
+  tag: Orders
+- operationId: getOrder
+  method: GET
+  path: /api/orders/{orderAgencyOrderId}
+  summary: 단일 주문 조회
+  tag: Orders
+- operationId: listOrders
+  method: GET
+  path: /api/orders
+  summary: 주문 목록 조회
+  tag: Orders
+- operationId: markOrderPrepareComplete
+  method: POST
+  path: /api/orders/{orderAgencyOrderId}/prepare-complete
+  summary: 상품 준비 완료
+  tag: Orders
+- operationId: updateFlexibleOrderDeliveryPrice
+  method: PUT
+  path: /api/flexible/orders/{orderAgencyOrderId}/delivery-price
+  summary: 요청 배달 요금 수정
+  tag: Orders
+- operationId: updateOrderDropInfo
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/drop-info
+  summary: 드랍지 수정
+  tag: Orders
+- operationId: updateOrderMemoInfo
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/memo-info
+  summary: 메모 정보 수정
+  tag: Orders
+- operationId: updateOrderPaymentInfo
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/payment-info
+  summary: 결제 및 상품 정보 수정
+  tag: Orders
+- operationId: updateOrderPhoneInfo
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/phone-info
+  summary: 연락처 정보 수정
+  tag: Orders
+- operationId: updateOrderPickupWishAt
+  method: PUT
+  path: /api/orders/{orderAgencyOrderId}/pickup-wish-at
+  summary: 픽업 희망 일시 수정
+  tag: Orders
+- operationId: createStoreMapping
+  method: POST
+  path: /api/store-mapping
+  summary: 상점 매핑 등록
+  tag: Stores
+- operationId: getStoreMapping
+  method: GET
+  path: /api/store-mapping/{orderAgencyStoreId}
+  summary: 상점 매핑 조회
+  tag: Stores
+- operationId: listStores
+  method: GET
+  path: /api/stores
+  summary: 상점 목록 조회
+  tag: Stores
+- operationId: pauseStoreMapping
+  method: PUT
+  path: /api/store-mapping/pause
+  summary: 상점 매핑 해제
+  tag: Stores
+webhook_only:
+- event: onDeliveryAccepted
+  summary: 배달 접수
+  path: /delivery/accepted
+- event: onDeliveryCardPayments
+  summary: 카드 결제 내역
+  path: /delivery/payments
+- event: onDeliveryCashReceipts
+  summary: 현금영수증 발급 내역
+  path: /delivery/cash-receipts
+- event: onDeliveryChargeChanged
+  summary: 배달 요금 변경
+  path: /delivery/delivery-charge-info
+- event: onDeliveryDropExpectedAtChanged
+  summary: 드랍 예상 일시 변경
+  path: /delivery/drop-expected-at
+- event: onDeliveryDropInfoChanged
+  summary: 드랍지 변경
+  path: /delivery/drop-info
+- event: onDeliveryDropNear
+  summary: 드랍지 곧 도착 알림
+  path: /delivery/drop-near
+- event: onDeliveryPickupExpectedAtChanged
+  summary: 픽업 예상 일시 변경
+  path: /delivery/pickup-expected-at
+- event: onDeliveryStatusChanged
+  summary: 배달 상태 변경
+  path: /delivery/status
+- event: onOrderAgencyAreaCreated
+  summary: 권역/구역 생성
+  path: /order-agency/area/create
+- event: onOrderAgencyAreaDeleted
+  summary: 권역/구역 삭제
+  path: /order-agency/area/delete
+- event: onOrderAgencyAreaUpdated
+  summary: 권역/구역 수정
+  path: /order-agency/area/update
+- event: onOrderPaymentInfoChanged
+  summary: 주문 결제 정보 변경
+  path: /order/payment-info
+- event: onOrderStatusChanged
+  summary: 주문 상태 변경
+  path: /order/status
+- event: onStoreAreaCreated
+  summary: 권역/구역 생성
+  path: /store/areas/create
+- event: onStoreAreaDeleted
+  summary: 권역/구역 삭제
+  path: /store/areas/delete
+- event: onStoreAreaUpdated
+  summary: 권역/구역 수정
+  path: /store/areas/update
+- event: onStoreDeliveryDisabled
+  summary: 배달 중단
+  path: /stores/delivery-disable
+- event: onStoreDeliveryEnabled
+  summary: 배달 중단 해제
+  path: /stores/delivery-enable
+- event: onStoreDepositCharged
+  summary: 상점 예치금 충전
+  path: /store/deposit-info
+coverage:
+  tools_named: 1
+  tools_bound_to_rest: 0
+  mcp_only: 1
+  rest_operations_total: 21
+  rest_operations_with_a_tool: 0
+  webhook_events_total: 20
+  webhook_events_with_a_tool: 0
+  binding_rate: 0%

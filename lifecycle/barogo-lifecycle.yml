@@ -1,0 +1,80 @@
+generated: '2026-08-06'
+method: searched
+source: https://developer.gorelas.com/api-docs-md/index.md
+versioning:
+  scheme: none
+  current: null
+  detail: >-
+    Gorela publishes no API version. Paths are unversioned (/api/orders), there is no version
+    header and no date-pinned release train. The only version marker on the whole surface is
+    the "Last updated" stamp at the foot of the developer reference.
+  docs_last_updated: '2026-06-23'
+  docs: https://developer.gorelas.com/api-doc/request
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No deprecation policy, no RFC 8594 Sunset/Deprecation header support, and no notice period
+    is published. A partner learns about change through its assigned TAM, not through the API.
+sla:
+  url: null
+  uptime_target: null
+  detail: >-
+    No public SLA or uptime commitment. The docs do name a MAINTENANCE_TIME (502) error class
+    and a SERVICE_UNAVAILABLE (503) class, so planned maintenance windows exist, but no
+    schedule or advance-notice commitment is published.
+status_page: null
+status_page_probe:
+  - url: https://status.gorelas.com/
+    status: 0
+    result: DNS does not resolve
+  - url: https://developer.gorelas.com/notice
+    status: 200
+    result: >-
+      Client-rendered SPA route referenced from the developer site; returns the same 1985-byte
+      shell as every other path, so no status or notice content is machine-readable.
+changelog:
+  url: null
+  published: false
+  detail: >-
+    No dated changelog. The reference carries a single "Last updated: 2026-06-23" line with no
+    entries, so there is no way to see what changed or when from outside.
+deprecated_operations: []
+support:
+  tam_email: tech_poc@barogo.com
+  chat: https://gitter.im
+  detail: >-
+    Support is relationship-based: partners request a Gitter invite or email the Gorela TAM
+    alias. There is no public issue tracker, forum or community.
+onboarding_stages:
+  - stage: 1
+    name: 제휴 협의
+    detail: Commercial and policy agreement with a Barogo sales/operations owner; a pre-integration checklist must be completed by both sides.
+  - stage: 2
+    name: 연동 개발
+    detail: Sign up on the Gorela developer site, register the order-agency entity, issue an API key, build against staging.
+  - stage: 3
+    name: 서비스 오픈
+    detail: Production store mapping is arranged through the sales/operations owner, not self-serve.
+  - stage: 4
+    name: 운영
+    detail: Post-launch issue response and monitoring reports are provided.
+environments:
+  - name: staging
+    api: https://staging-api-interlocker.gorelas.com
+    admin: https://staging-admin.gorelas.com
+  - name: production
+    api: https://api-interlocker.gorelas.com
+    admin: https://admin.gorelas.com
+gaps:
+  - No API version identifier of any kind.
+  - No deprecation policy and no Sunset/Deprecation header support.
+  - No changelog, so breaking changes are invisible to an integrator until they break.
+  - No status page and no published SLA.
+x-evidence:
+  fetched: '2026-08-06'
+  url: https://developer.gorelas.com/api-docs-md/index.md
+  http_status: 200
+  content_type: text/markdown; charset=UTF-8
