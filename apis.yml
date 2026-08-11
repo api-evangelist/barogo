@@ -37,36 +37,88 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: barogo-gorela-order-agency-api
-  name: Gorela Order Agency API
-  description: >-
-    The Gorela (고릴라) order-agency API. An order agency quotes a delivery, accepts the order
-    into Gorela, and Gorela brokers it out to one or more delivery agencies that dispatch
-    riders. Order and delivery are separate aggregates — one order can fan out into N
-    deliveries, and the order only closes once every child delivery is terminal. Two fare
-    models are offered: 고정 요금 | 의무 수행, where Gorela sets the fare and takes responsibility
-    for completion, and 유연 요금 | 자율 수행, where the partner sets the fare and riders opt in.
-    Each is available address-based (no store setup) or store-based (requires a 1:1 store
-    mapping). Twenty-one REST operations plus twenty callbacks, authenticated with a static
-    API key as an HTTP bearer token.
+- aid: barogo:barogo-areas-api
+  name: Barogo Areas API
+  description: 상점 배달 권역 / 불가 구역 / 할증 구역 조회
+  humanURL: https://developer.gorelas.com/api-doc/request
+  baseURL: https://api-interlocker.gorelas.com
+  tags:
+  - Areas
+  properties:
+  - type: OpenAPI
+    url: openapi/barogo-areas-api-openapi.yml
+  - type: Examples
+    url: examples/barogo-gorela-examples.yml
+  - type: Documentation
+    url: https://developer.gorelas.com/api-doc/request
+  - type: APIReference
+    url: https://developer.gorelas.com/api-docs-md/index.md
+  - type: Authentication
+    url: authentication/barogo-authentication.yml
+- aid: barogo:barogo-delivery-api
+  name: Barogo Delivery API
+  description: 배달대행사 배달 수행 상태 조회
   humanURL: https://developer.gorelas.com/api-doc/request
   baseURL: https://api-interlocker.gorelas.com
   tags:
   - Delivery
-  - Orders
-  - Logistics
-  - Last Mile Delivery
-  - Store Mapping
-  - Webhooks
   properties:
   - type: OpenAPI
-    name: Gorela Order Agency API — OpenAPI 3.1
-    url: openapi/barogo-gorela-openapi.yml
+    url: openapi/barogo-delivery-api-openapi.yml
+  - type: Examples
+    url: examples/barogo-gorela-examples.yml
+  - type: Documentation
+    url: https://developer.gorelas.com/api-doc/request
+  - type: APIReference
+    url: https://developer.gorelas.com/api-docs-md/index.md
+  - type: Authentication
+    url: authentication/barogo-authentication.yml
+- aid: barogo:barogo-deposits-api
+  name: Barogo Deposits API
+  description: 상점 예치금(Cash, Money) 잔액 조회
+  humanURL: https://developer.gorelas.com/api-doc/request
+  baseURL: https://api-interlocker.gorelas.com
+  tags:
+  - Deposits
+  properties:
   - type: OpenAPI
-    name: Gorela Callback (Webhook) API — OpenAPI 3.1 webhooks
-    url: openapi/barogo-gorela-callbacks-openapi.yml
-  - type: Overlay
-    url: overlays/barogo-gorela-overlay.yaml
+    url: openapi/barogo-deposits-api-openapi.yml
+  - type: Examples
+    url: examples/barogo-gorela-examples.yml
+  - type: Documentation
+    url: https://developer.gorelas.com/api-doc/request
+  - type: APIReference
+    url: https://developer.gorelas.com/api-docs-md/index.md
+  - type: Authentication
+    url: authentication/barogo-authentication.yml
+- aid: barogo:barogo-orders-api
+  name: Barogo Orders API
+  description: 주문 접수 / 조회 / 수정 / 취소 및 배달 가능 여부·요금 조회
+  humanURL: https://developer.gorelas.com/api-doc/request
+  baseURL: https://api-interlocker.gorelas.com
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/barogo-orders-api-openapi.yml
+  - type: Examples
+    url: examples/barogo-gorela-examples.yml
+  - type: Documentation
+    url: https://developer.gorelas.com/api-doc/request
+  - type: APIReference
+    url: https://developer.gorelas.com/api-docs-md/index.md
+  - type: Authentication
+    url: authentication/barogo-authentication.yml
+- aid: barogo:barogo-stores-api
+  name: Barogo Stores API
+  description: 상점 조회 및 주문 제휴사 ↔ 고릴라 상점 매핑
+  humanURL: https://developer.gorelas.com/api-doc/request
+  baseURL: https://api-interlocker.gorelas.com
+  tags:
+  - Stores
+  properties:
+  - type: OpenAPI
+    url: openapi/barogo-stores-api-openapi.yml
   - type: Examples
     url: examples/barogo-gorela-examples.yml
   - type: Documentation
@@ -76,6 +128,8 @@ apis:
   - type: Authentication
     url: authentication/barogo-authentication.yml
 common:
+- type: Overlay
+  url: overlays/barogo-gorela-overlay.yaml
 - type: Website
   url: https://www.barogo.com/
 - type: DeveloperPortal
