@@ -1,0 +1,296 @@
+openapi: 3.2.0
+info:
+  title: Barogo Gorela Order Agency Areas API
+  version: '2026-06-23'
+  summary: 고릴라(Gorela) 배달대행 중계 플랫폼 — 주문 제휴사(Order Agency) 연동 API
+  description: 'Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer''s order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.
+
+
+    This OpenAPI document was DERIVED by API Evangelist from Barogo''s own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.
+
+
+    Auth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.'
+  contact:
+    name: Gorela TAM
+    email: tech_poc@barogo.com
+    url: https://developer.gorelas.com/
+  x-origin:
+  - format: markdown
+    url: https://developer.gorelas.com/api-docs-md/index.md
+    version: '2026-06-23'
+    converter:
+      url: https://apievangelist.com
+      version: pipeline-enrich local-v1
+servers:
+- url: https://api-interlocker.gorelas.com
+  description: 운영 (production)
+- url: https://staging-api-interlocker.gorelas.com
+  description: 테스트 (staging)
+security:
+- bearerAuth: []
+tags:
+- name: Areas
+  description: 상점 배달 권역 / 불가 구역 / 할증 구역 조회
+paths:
+  /api/order-agency-stores/{orderAgencyStoreId}/areas:
+    get:
+      operationId: getStoreAreas
+      summary: 상점 권역/구역 조회
+      description: '공식 문서: 상점 권역/구역 조회'
+      tags:
+      - Areas
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-13.md
+        fetched: '2026-08-06'
+      parameters:
+      - name: orderAgencyStoreId
+        in: path
+        required: true
+        description: 주문 제휴사 상점 아이디
+        schema:
+          type: string
+          maxLength: 100
+          description: 주문 제휴사 상점 아이디
+      - name: orderAgencyId
+        in: query
+        required: true
+        description: 주문 제휴사 아이디
+        schema:
+          type: string
+          maxLength: 30
+          description: 주문 제휴사 아이디
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  data:
+                    type: object
+                    properties:
+                      orderAgencyId:
+                        type: string
+                        maxLength: 30
+                        description: 주문 제휴사 아이디
+                      orderAgencyStoreId:
+                        type: string
+                        maxLength: 100
+                        description: 주문 제휴사 상점 아이디
+                      storeId:
+                        type: integer
+                        description: 고릴라 상점 아이디
+                      features:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              description: = "Feature" 고정값
+                            preoperties:
+                              type: object
+                              properties:
+                                areaId:
+                                  type: string
+                                  x-constraint: '100'
+                                  description: 권역/구역 아이디
+                                areaName:
+                                  type: string
+                                  x-constraint: '200'
+                                  description: 권역/구역 이름
+                                areaType:
+                                  type: string
+                                  x-constraint: '50'
+                                  description: 권역/구역 유형
+                                  enum:
+                                  - DELIVERY_POSSIBLE_AREA
+                                  - DELIVERY_IMPOSSIBLE_AREA
+                                  - EXTRA_CHARGE_AREA
+                                  x-enum-descriptions:
+                                    DELIVERY_POSSIBLE_AREA: 배달 가능 권역
+                                    DELIVERY_IMPOSSIBLE_AREA: 배달 불가 구역
+                                    EXTRA_CHARGE_AREA: 할증 구역
+                                pickupExtraCharge:
+                                  type: integer
+                                  x-constraint: 0 >=
+                                  description: 픽업 할증 금액 (유형이 할증 구역인 경우 required)
+                                dropExtraCharge:
+                                  type: integer
+                                  x-constraint: 0 >=
+                                  description: 드랍 할증 금액 (유형이 할증 구역인 경우 required)
+                              required:
+                              - areaId
+                              - areaName
+                              - areaType
+                              - dropExtraCharge
+                            geometry:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  description: = "Polygon" 고정값
+                                coordinates:
+                                  type: array
+                                  items:
+                                    type: array
+                                    items:
+                                      type: array
+                                      items:
+                                        type: number
+                                        format: double
+                                  description: 좌표 권역/구역 목록
+                              required:
+                              - type
+                              - coordinates
+                          required:
+                          - type
+                    required:
+                    - orderAgencyId
+                    - orderAgencyStoreId
+                    - storeId
+                    title: 권역/구역 정보
+                required:
+                - statusCode
+                - data
+                title: Response Data (SUCCESS)
+              examples:
+                성공:
+                  value:
+                    statusCode: 200
+                    data:
+                      orderAgencyId: gorela_chicken
+                      orderAgencyStoreId: gorela_chicken_store_1
+                      storeId: 12223
+                      features:
+                      - type: Feature
+                        properties:
+                          areaId: a23eeed7-6319-4136-b7de-52a57d6a15e2
+                          areaName: 상점1 권역
+                          areaType: DELIVERY_POSSIBLE_AREA
+                        geometry:
+                          type: Polygon
+                          coordinates:
+                          - - - 127.03087926803886
+                              - 37.51408656999381
+                            - - 127.02146758744085
+                              - 37.51109732162127
+                            - - 127.0244514673468
+                              - 37.50457346611247
+                            - - 127.01970098768997
+                              - 37.5029525439367
+                            - - 127.02150854924217
+                              - 37.496176662210175
+                            - - 127.02761570058925
+                              - 37.49786928477963
+                            - - 127.02973983826172
+                              - 37.493111453318974
+                            - - 127.03933039172989
+                              - 37.49584771080132
+                            - - 127.03670929291451
+                              - 37.50082210929581
+                            - - 127.04268157616359
+                              - 37.50273023472369
+                            - - 127.06299831976
+                              - 37.50881194144773
+                            - - 127.0602430709071
+                              - 37.51436356478256
+                            - - 127.05708037588343
+                              - 37.52016759719988
+                            - - 127.04124198687562
+                              - 37.51729097936169
+                            - - 127.03087926803886
+                              - 37.51408656999381
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      title: 에러 응답 데이터
+      description: Gorela error envelope. Published at https://developer.gorelas.com/api-docs-md/common-doc.md
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP 상태 코드
+        error:
+          type: object
+          properties:
+            category:
+              type: string
+              description: 에러 카테고리 (errorCategory)
+            errorCode:
+              type: string
+              description: 에러 코드
+            message:
+              type: string
+              description: 에러 메세지
+          required:
+          - category
+          - errorCode
+          - message
+      required:
+      - statusCode
+      - error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: '고릴라는 API Key 기반으로 접근 권한을 확인합니다. `Authorization: Bearer {API_Key}`'

@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Barogo Gorela Order Agency Delivery API",
+    "version": "2026-06-23"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Delivery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "배달대행사 상태 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/delivery-conditions",
+            "params": [
+              {
+                "name": "orderAgencyId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사 아이디"
+              },
+              {
+                "name": "orderAgencyStoreId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사의 상점 아이디"
+              }
+            ]
+          },
+          "docs": "공식 문서: 배달대행사 상태 조회"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

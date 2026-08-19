@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Barogo Gorela Order Agency Stores API",
+    "version": "2026-06-23"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stores",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "상점 매핑 등록",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/store-mapping",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 상점 매핑"
+        },
+        {
+          "info": {
+            "name": "상점 매핑 해제",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/store-mapping/pause",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 상점 매핑"
+        },
+        {
+          "info": {
+            "name": "상점 매핑 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/store-mapping/:orderAgencyStoreId",
+            "params": [
+              {
+                "name": "orderAgencyStoreId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 상점 아이디"
+              },
+              {
+                "name": "orderAgencyId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사 아이디"
+              }
+            ]
+          },
+          "docs": "공식 문서: 상점 매핑"
+        },
+        {
+          "info": {
+            "name": "상점 목록 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/stores",
+            "params": [
+              {
+                "name": "businessNumber",
+                "value": "",
+                "type": "query",
+                "description": "사업자 등록 번호"
+              },
+              {
+                "name": "phone",
+                "value": "",
+                "type": "query",
+                "description": "상점 전화번호"
+              }
+            ]
+          },
+          "docs": "공식 문서: 상점 매핑"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

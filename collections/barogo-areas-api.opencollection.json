@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Barogo Gorela Order Agency Areas API",
+    "version": "2026-06-23"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Areas",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "상점 권역/구역 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/order-agency-stores/:orderAgencyStoreId/areas",
+            "params": [
+              {
+                "name": "orderAgencyStoreId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 상점 아이디"
+              },
+              {
+                "name": "orderAgencyId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사 아이디"
+              }
+            ]
+          },
+          "docs": "공식 문서: 상점 권역/구역 조회"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

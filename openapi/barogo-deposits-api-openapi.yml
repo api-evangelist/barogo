@@ -1,0 +1,271 @@
+openapi: 3.2.0
+info:
+  title: Barogo Gorela Order Agency Deposits API
+  version: '2026-06-23'
+  summary: 고릴라(Gorela) 배달대행 중계 플랫폼 — 주문 제휴사(Order Agency) 연동 API
+  description: 'Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer''s order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.
+
+
+    This OpenAPI document was DERIVED by API Evangelist from Barogo''s own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.
+
+
+    Auth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.'
+  contact:
+    name: Gorela TAM
+    email: tech_poc@barogo.com
+    url: https://developer.gorelas.com/
+  x-origin:
+  - format: markdown
+    url: https://developer.gorelas.com/api-docs-md/index.md
+    version: '2026-06-23'
+    converter:
+      url: https://apievangelist.com
+      version: pipeline-enrich local-v1
+servers:
+- url: https://api-interlocker.gorelas.com
+  description: 운영 (production)
+- url: https://staging-api-interlocker.gorelas.com
+  description: 테스트 (staging)
+security:
+- bearerAuth: []
+tags:
+- name: Deposits
+  description: 상점 예치금(Cash, Money) 잔액 조회
+paths:
+  /api/deposit-infos:
+    get:
+      operationId: getStoreDepositInfo
+      summary: 상점 예치금 조회
+      description: '공식 문서: 상점 예치금 조회'
+      tags:
+      - Deposits
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-9.md
+        fetched: '2026-08-06'
+      parameters:
+      - name: orderAgencyId
+        in: query
+        required: true
+        description: 주문 제휴사 아이디
+        schema:
+          type: string
+          maxLength: 30
+          description: 주문 제휴사 아이디
+      - name: orderAgencyStoreId
+        in: query
+        required: true
+        description: 주문 제휴사의 상점 아이디
+        schema:
+          type: string
+          maxLength: 100
+          description: 주문 제휴사의 상점 아이디
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          deliveryAgencyId:
+                            type: string
+                            maxLength: 30
+                            description: 배달대행사 아이디
+                          deliveryAgencyName:
+                            type: string
+                            maxLength: 30
+                            description: 배달대행사 이름
+                          deposit:
+                            type: integer
+                            minimum: 0
+                            description: 예치금 잔액
+                          bank:
+                            type: string
+                            description: 은행명
+                          accountNumber:
+                            type: string
+                            description: 계좌 번호
+                          depositor:
+                            type: string
+                            description: 예금주
+                        required:
+                        - deliveryAgencyId
+                        - deliveryAgencyName
+                        - deposit
+                        - depositor
+                        title: 성공 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (SUCCESS)
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          category:
+                            type: string
+                            description: 에러 카테고리
+                          errorCode:
+                            type: string
+                            description: 에러 코드
+                          message:
+                            type: string
+                            description: 에러 메시지
+                          info:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                deliveryAgencyId:
+                                  type: string
+                                  maxLength: 30
+                                  description: 배달대행사 아이디
+                                deliveryAgencyName:
+                                  type: string
+                                  maxLength: 30
+                                  description: 배달대행사 이름 해당 배달대행사 정보
+                              required:
+                              - deliveryAgencyId
+                              - deliveryAgencyName
+                              title: 베달대행사 데이터
+                        required:
+                        - category
+                        - errorCode
+                        - message
+                        title: 에러 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (ERROR)
+                  description: 부분 실패(207) 등에서 함께 전달되는 에러 데이터
+              examples:
+                성공:
+                  value:
+                    statusCode: 200
+                    data:
+                    - deliveryAgencyId: barogo
+                      deliveryAgencyName: 바로고
+                      deposit: 95000
+                      bank: KB국민은행
+                      accountNumber: 123123123123123
+                      depositor: 홍길동
+                일부 성공 (207):
+                  value:
+                    statusCode: 207
+                    data:
+                    - deliveryAgencyId: barogo
+                      deliveryAgencyName: 바로고
+                      deposit: 95000
+                      bank: KB국민은행
+                      accountNumber: 123123123123123
+                      depositor: 홍길동
+                    errors:
+                    - category: BAD_GATEWAY
+                      errorCode: EXTERNAL_SERVER_ERROR
+                      message: '[moacall] fail request delivery agency service'
+                      info:
+                        deliveryAgencyId: moacall
+                        deliveryAgencyName: 모아콜
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      title: 에러 응답 데이터
+      description: Gorela error envelope. Published at https://developer.gorelas.com/api-docs-md/common-doc.md
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP 상태 코드
+        error:
+          type: object
+          properties:
+            category:
+              type: string
+              description: 에러 카테고리 (errorCategory)
+            errorCode:
+              type: string
+              description: 에러 코드
+            message:
+              type: string
+              description: 에러 메세지
+          required:
+          - category
+          - errorCode
+          - message
+      required:
+      - statusCode
+      - error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: '고릴라는 API Key 기반으로 접근 권한을 확인합니다. `Authorization: Bearer {API_Key}`'

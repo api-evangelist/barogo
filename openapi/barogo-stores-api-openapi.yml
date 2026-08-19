@@ -1,0 +1,735 @@
+openapi: 3.2.0
+info:
+  title: Barogo Gorela Order Agency Stores API
+  version: '2026-06-23'
+  summary: 고릴라(Gorela) 배달대행 중계 플랫폼 — 주문 제휴사(Order Agency) 연동 API
+  description: 'Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer''s order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.
+
+
+    This OpenAPI document was DERIVED by API Evangelist from Barogo''s own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.
+
+
+    Auth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.'
+  contact:
+    name: Gorela TAM
+    email: tech_poc@barogo.com
+    url: https://developer.gorelas.com/
+  x-origin:
+  - format: markdown
+    url: https://developer.gorelas.com/api-docs-md/index.md
+    version: '2026-06-23'
+    converter:
+      url: https://apievangelist.com
+      version: pipeline-enrich local-v1
+servers:
+- url: https://api-interlocker.gorelas.com
+  description: 운영 (production)
+- url: https://staging-api-interlocker.gorelas.com
+  description: 테스트 (staging)
+security:
+- bearerAuth: []
+tags:
+- name: Stores
+  description: 상점 조회 및 주문 제휴사 ↔ 고릴라 상점 매핑
+paths:
+  /api/store-mapping:
+    post:
+      operationId: createStoreMapping
+      summary: 상점 매핑 등록
+      description: '공식 문서: 상점 매핑'
+      tags:
+      - Stores
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-12.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+              title: 상점 매핑
+              x-source-doc: https://developer.gorelas.com/api-docs-md/request-12.md
+            examples:
+              request-12 — Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: TEST_00000123
+                  storeId: 12266
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                      required:
+                      - isSuccess
+                      title: 성공 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (SUCCESS)
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                        reason:
+                          type: string
+                          description: 실패 사유
+                          enum:
+                          - NOT_FOUND_STORE
+                          - ALREADY_MAPPED
+                          x-enum-descriptions:
+                            NOT_FOUND_STORE: 상점을 찾을 수 없는 경우
+                            ALREADY_MAPPED: 이미 매핑이 되어 있는 경우
+                      required:
+                      - isSuccess
+                      - reason
+                      title: 거절 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (REJECT)
+                  description: 요청이 거절된 경우의 응답 데이터
+              examples:
+                성공 응답 예시:
+                  value:
+                    statusCode: 200
+                    data:
+                      isSuccess: true
+                거절 응답 예시:
+                  value:
+                    statusCode: 200
+                    data:
+                      isSuccess: true
+                      reason: NOT_FOUND_STORE
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/store-mapping/pause:
+    put:
+      operationId: pauseStoreMapping
+      summary: 상점 매핑 해제
+      description: '공식 문서: 상점 매핑'
+      tags:
+      - Stores
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-12.md
+        fetched: '2026-08-06'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderAgencyId:
+                  type: string
+                  maxLength: 30
+                  description: 주문 제휴사 아이디
+                orderAgencyStoreId:
+                  type: string
+                  maxLength: 100
+                  description: 주문 제휴사 상점 아이디
+                storeId:
+                  type: integer
+                  description: 고릴라 상점 아이디
+              required:
+              - orderAgencyId
+              - orderAgencyStoreId
+              - storeId
+              title: 상점 매핑
+              x-source-doc: https://developer.gorelas.com/api-docs-md/request-12.md
+            examples:
+              request-12 — Request Example:
+                value:
+                  orderAgencyId: gorela_chicken
+                  orderAgencyStoreId: TEST_00000123
+                  storeId: 12266
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                      required:
+                      - isSuccess
+                      title: 성공 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (SUCCESS)
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                        reason:
+                          type: string
+                          description: 실패 사유
+                          enum:
+                          - NOT_FOUND_STORE
+                          - ALREADY_PAUSED
+                          - NONE_ORDER_AGENCY_MAPPING
+                          x-enum-descriptions:
+                            NOT_FOUND_STORE: 상점을 찾을 수 없는 경우
+                            ALREADY_PAUSED: 이미 매핑이 중지되어 있는 경우
+                            NONE_ORDER_AGENCY_MAPPING: 매핑이 되어 있지 않은 경우
+                      required:
+                      - isSuccess
+                      - reason
+                      title: 거절 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (REJECT)
+                  description: 요청이 거절된 경우의 응답 데이터
+              examples:
+                성공 응답 예시:
+                  value:
+                    statusCode: 200
+                    data:
+                      isSuccess: true
+                거절 응답 예시:
+                  value:
+                    statusCode: 200
+                    data:
+                      isSuccess: true
+                      reason: NOT_FOUND_STORE
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/store-mapping/{orderAgencyStoreId}:
+    get:
+      operationId: getStoreMapping
+      summary: 상점 매핑 조회
+      description: '공식 문서: 상점 매핑'
+      tags:
+      - Stores
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-12.md
+        fetched: '2026-08-06'
+      parameters:
+      - name: orderAgencyStoreId
+        in: path
+        required: true
+        description: 주문 제휴사 상점 아이디
+        schema:
+          type: string
+          maxLength: 100
+          description: 주문 제휴사 상점 아이디
+      - name: orderAgencyId
+        in: query
+        required: true
+        description: 주문 제휴사 아이디
+        schema:
+          type: string
+          maxLength: 30
+          description: 주문 제휴사 아이디
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        storeId:
+                          type: integer
+                          description: 고릴라 상점 아이디
+                        mappingStatus:
+                          type: string
+                          x-constraint: 1 <= 30
+                          description: 매핑 상태
+                          enum:
+                          - DONE
+                          - PAUSED
+                          x-enum-descriptions:
+                            DONE: 매핑
+                            PAUSED: 매핑 중지
+                        orderAgencyStoreId:
+                          type: string
+                          x-constraint: 1 <= 100
+                          description: 주문 제휴사 상점 아이디
+                        orderAgencyId:
+                          type: string
+                          x-constraint: 1 <= 30
+                          description: 주문 제휴사 아이디
+                      required:
+                      - storeId
+                      - mappingStatus
+                      - orderAgencyStoreId
+                      - orderAgencyId
+                      title: 매핑 정보
+                required:
+                - statusCode
+                - data
+                title: Response Data (SUCCESS)
+              examples:
+                Response Example:
+                  value:
+                    statusCode: 200
+                    data:
+                    - storeId: 12266
+                      orderAgencyId: gorela_chicken
+                      orderAgencyStoreId: TEST_00000123
+                      mappingStatus: DONE
+                    - storeId: 47755
+                      orderAgencyId: gorela_chicken
+                      orderAgencyStoreId: TEST_00000123
+                      mappingStatus: PAUSED
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/stores:
+    get:
+      operationId: listStores
+      summary: 상점 목록 조회
+      description: '공식 문서: 상점 매핑'
+      tags:
+      - Stores
+      x-evidence:
+        method: derived-from-published-docs
+        sources:
+        - https://developer.gorelas.com/api-docs-md/request-12.md
+        fetched: '2026-08-06'
+      parameters:
+      - name: businessNumber
+        in: query
+        required: true
+        description: 사업자 등록 번호
+        schema:
+          type: string
+          x-constraint: '10'
+          description: 사업자 등록 번호
+      - name: phone
+        in: query
+        required: false
+        description: 상점 전화번호
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 12
+          description: 상점 전화번호
+      responses:
+        '200':
+          description: 요청한 작업이 성공했을 때 응답됩니다.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                        stores:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              storeId:
+                                type: integer
+                                description: 고릴라 상점 아이디
+                              name:
+                                type: string
+                                x-constraint: 1 <= 30
+                                description: 상점 이름
+                              phone:
+                                type: string
+                                x-constraint: 8 <= 12
+                                description: 상점 전화번호
+                              jibunAddress:
+                                type: string
+                                x-constraint: 1 <= 100
+                                description: 상점 지번 주소
+                              roadAddress:
+                                type: string
+                                x-constraint: 1 <= 100
+                                description: 상점 도로명 주소
+                              detailAddress:
+                                type: string
+                                x-constraint: 1 <= 100
+                                description: 상점 상세 주소
+                              businessNumber:
+                                type: string
+                                x-constraint: 1 <= 10
+                                description: 사업자 등록 번호
+                              createdAt:
+                                type: integer
+                                format: int64
+                                description: 상점 생성 일시 (timestamp)
+                            required:
+                            - storeId
+                            - name
+                            - phone
+                            - jibunAddress
+                            - businessNumber
+                            - createdAt
+                            title: 상점 목록
+                      required:
+                      - isSuccess
+                      title: 성공 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (SUCCESS)
+                - type: object
+                  properties:
+                    statusCode:
+                      type: integer
+                    data:
+                      type: object
+                      properties:
+                        isSuccess:
+                          type: boolean
+                          description: 성공 여부
+                        reason:
+                          type: string
+                          description: 실패 사유
+                          enum:
+                          - OVER_LIMIT
+                          - CLOSED_STORE
+                          - NOT_FOUND_STORE
+                          x-enum-descriptions:
+                            OVER_LIMIT: 조회 결과 너무 많음 (10개 초과)
+                            CLOSED_STORE: 종료된 상점
+                            NOT_FOUND_STORE: 일치하는 상점 없음
+                      required:
+                      - isSuccess
+                      - reason
+                      title: 거절 응답 데이터
+                  required:
+                  - statusCode
+                  - data
+                  title: Response Data (REJECT)
+                  description: 요청이 거절된 경우의 응답 데이터
+              examples:
+                Response Example:
+                  value:
+                    statusCode: 200
+                    data:
+                    - storeId: 12266
+                      name: 고릴라 치킨
+                      businessNumber: '1112255555'
+                      phone: '021112222'
+                      jibunAddress: 서울특별시 강남구 논현동 117
+                      roadAddress: 서울특별시 강남구 언주로134길 32
+                      detailAddress: 씨앤에스빌딩 4층
+                      createdAt: 1764821510000
+                    - storeId: 47755
+                      name: 고릴라 피자
+                      businessNumber: '1112255555'
+                      phone: '021231234'
+                      jibunAddress: 서울 강남구 삼성동 159
+                      roadAddress: 서울 강남구 영동대로 513
+                      detailAddress: 99층 1004호
+                      createdAt: 1764821510000
+        '400':
+          description: BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: CONFLICT — DUPLICATED_ID / DUPLICATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: TOO_MANY_REQUESTS — API 요청 횟수 제한 초과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      title: 에러 응답 데이터
+      description: Gorela error envelope. Published at https://developer.gorelas.com/api-docs-md/common-doc.md
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP 상태 코드
+        error:
+          type: object
+          properties:
+            category:
+              type: string
+              description: 에러 카테고리 (errorCategory)
+            errorCode:
+              type: string
+              description: 에러 코드
+            message:
+              type: string
+              description: 에러 메세지
+          required:
+          - category
+          - errorCode
+          - message
+      required:
+      - statusCode
+      - error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: '고릴라는 API Key 기반으로 접근 권한을 확인합니다. `Authorization: Bearer {API_Key}`'

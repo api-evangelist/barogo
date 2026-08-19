@@ -1,0 +1,684 @@
+{
+  "item": [
+    {
+      "id": "3c929dd3-3aa2-43ce-9f00-e5787aaef430",
+      "name": "Areas",
+      "description": {
+        "content": "상점 배달 권역 / 불가 구역 / 할증 구역 조회",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "367439a0-22b2-4f15-8143-79d5a534c165",
+          "name": "상점 권역/구역 조회",
+          "request": {
+            "name": "상점 권역/구역 조회",
+            "description": {
+              "content": "공식 문서: 상점 권역/구역 조회",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "order-agency-stores",
+                ":orderAgencyStoreId",
+                "areas"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "orderAgencyId",
+                  "value": "<string>",
+                  "description": "(Required) 주문 제휴사 아이디"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderAgencyStoreId",
+                  "description": "(Required) 주문 제휴사 상점 아이디"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d71c29d7-fc33-460b-a0fe-9b431683afa2",
+              "name": "요청한 작업이 성공했을 때 응답됩니다.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 200,\n  \"data\": {\n    \"orderAgencyId\": \"gorela_chicken\",\n    \"orderAgencyStoreId\": \"gorela_chicken_store_1\",\n    \"storeId\": 12223,\n    \"features\": [\n      {\n        \"type\": \"Feature\",\n        \"properties\": {\n          \"areaId\": \"a23eeed7-6319-4136-b7de-52a57d6a15e2\",\n          \"areaName\": \"상점1 권역\",\n          \"areaType\": \"DELIVERY_POSSIBLE_AREA\"\n        },\n        \"geometry\": {\n          \"type\": \"Polygon\",\n          \"coordinates\": [\n            [\n              [\n                127.03087926803886,\n                37.51408656999381\n              ],\n              [\n                127.02146758744085,\n                37.51109732162127\n              ],\n              [\n                127.0244514673468,\n                37.50457346611247\n              ],\n              [\n                127.01970098768997,\n                37.5029525439367\n              ],\n              [\n                127.02150854924217,\n                37.496176662210175\n              ],\n              [\n                127.02761570058925,\n                37.49786928477963\n              ],\n              [\n                127.02973983826172,\n                37.493111453318974\n              ],\n              [\n                127.03933039172989,\n                37.49584771080132\n              ],\n              [\n                127.03670929291451,\n                37.50082210929581\n              ],\n              [\n                127.04268157616359,\n                37.50273023472369\n              ],\n              [\n                127.06299831976,\n                37.50881194144773\n              ],\n              [\n                127.0602430709071,\n                37.51436356478256\n              ],\n              [\n                127.05708037588343,\n                37.52016759719988\n              ],\n              [\n                127.04124198687562,\n                37.51729097936169\n              ],\n              [\n                127.03087926803886,\n                37.51408656999381\n              ]\n            ]\n          ]\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a40ac8eb-16fe-493c-b908-986b84ed1689",
+              "name": "BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "713b5d15-f7e1-4948-ad25-d86a653bfb97",
+              "name": "UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f69f2fe5-4bf2-45a6-91bd-12c055ce7539",
+              "name": "NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc9c78d6-4b44-4516-a513-24ba1087d9ad",
+              "name": "CONFLICT — DUPLICATED_ID / DUPLICATED",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08c97804-899c-4dd0-ab31-8164b6c03557",
+              "name": "TOO_MANY_REQUESTS — API 요청 횟수 제한 초과",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f99ddc8-4b51-4153-8f3e-e9b81bfa28ea",
+              "name": "INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08fddc40-3881-4a46-8f67-da1f83e25770",
+              "name": "BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97d0c4a2-3ff7-42a2-8aa0-d3c2bcabffb5",
+              "name": "SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "548b3d82-35ac-4323-b532-6e11e660d1cf",
+              "name": "GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "order-agency-stores",
+                    ":orderAgencyStoreId",
+                    "areas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderAgencyStoreId",
+                      "description": "(Required) 주문 제휴사 상점 아이디"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 4798,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-interlocker.gorelas.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "75d74a90-94b1-4a1f-91f7-09c3fd85361f",
+    "name": "Barogo Gorela Order Agency Areas API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer's order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.\n\nThis OpenAPI document was DERIVED by API Evangelist from Barogo's own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.\n\nAuth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.\n\nContact Support:\n Name: Gorela TAM\n Email: tech_poc@barogo.com",
+      "type": "text/plain"
+    }
+  }
+}

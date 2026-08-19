@@ -1,0 +1,356 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Barogo Gorela Order Agency Orders API",
+    "version": "2026-06-23"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "배달 가능 여부 및 요금 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/delivery-possible",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 고정 요금 | 의무 수행 (상점 기반), 고정 요금 | 의무 수행 (주소 기반)"
+        },
+        {
+          "info": {
+            "name": "배달 가능 여부 및 요금 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/flexible/delivery-possible",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 유연 요금 | 자율 수행 (상점 기반), 유연 요금 | 자율 수행 (주소 기반)"
+        },
+        {
+          "info": {
+            "name": "주문 접수",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/flexible/orders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 유연 요금 | 자율 수행 (상점 기반), 유연 요금 | 자율 수행 (주소 기반)"
+        },
+        {
+          "info": {
+            "name": "요청 배달 요금 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/flexible/orders/:orderAgencyOrderId/delivery-price",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "주문 목록 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/orders",
+            "params": [
+              {
+                "name": "_limit",
+                "value": "",
+                "type": "query",
+                "description": "페이지당 아이템 개수 (default: 50)"
+              },
+              {
+                "name": "_offset",
+                "value": "",
+                "type": "query",
+                "description": "아이템 조회 기준 위치 (default: 0)"
+              },
+              {
+                "name": "_includes",
+                "value": "",
+                "type": "query",
+                "description": "추가 조회 항목"
+              },
+              {
+                "name": "_startAt",
+                "value": "",
+                "type": "query",
+                "description": "조회 시작 일시 (timestamp) - 주문 접수 일시 기준 *최대 조회 범위 7일"
+              },
+              {
+                "name": "_endAt",
+                "value": "",
+                "type": "query",
+                "description": "조회 끝 일시 (timestamp) - 주문 접수 일시 기준 *최대 조회 범위 7일"
+              },
+              {
+                "name": "orderStatus",
+                "value": "",
+                "type": "query",
+                "description": "주문 상태 조건 (or)"
+              },
+              {
+                "name": "orderAgencyStoreId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사의 상점 아이디 조건 (or)"
+              },
+              {
+                "name": "includeAllManageOrders",
+                "value": "",
+                "type": "query",
+                "description": "주문 접수 API를 통하여 접수한 주문 뿐만 아니라 관리 대상 상점에서 발생된 모든 주문을 함께 조회할지 여부 (default: false)"
+              }
+            ]
+          },
+          "docs": "공식 문서: 주문 조회"
+        },
+        {
+          "info": {
+            "name": "주문 접수 / 주문 접수 - ACCEPTED_ORDER",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/orders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 고정 요금 | 의무 수행 (상점 기반), 고정 요금 | 의무 수행 (주소 기반), 주문 접수 - ACCEPTED_ORDER"
+        },
+        {
+          "info": {
+            "name": "단일 주문 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              },
+              {
+                "name": "orderAgencyId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사 아이디 복수개의 주문 제휴사(orderAgencyId)를 연동한 경우에, 각 주문 제휴사 간에 \"orderAgencyOrderId\" 중복이 발생할 수 있다면 꼭 필요한 필드입니다."
+              },
+              {
+                "name": "_includes",
+                "value": "",
+                "type": "query",
+                "description": "추가 조회 항목"
+              }
+            ]
+          },
+          "docs": "공식 문서: 주문 조회"
+        },
+        {
+          "info": {
+            "name": "드랍지 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/drop-info",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "메모 정보 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/memo-info",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "결제 및 상품 정보 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/payment-info",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "연락처 정보 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/phone-info",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "픽업 희망 일시 수정",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/pickup-wish-at",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 수정"
+        },
+        {
+          "info": {
+            "name": "상품 준비 완료",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/prepare-complete",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ]
+          },
+          "docs": "공식 문서: 상품 준비 완료"
+        },
+        {
+          "info": {
+            "name": "주문 취소",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-interlocker.gorelas.com/api/orders/:orderAgencyOrderId/status/cancel",
+            "params": [
+              {
+                "name": "orderAgencyOrderId",
+                "value": "",
+                "type": "path",
+                "description": "주문 제휴사 주문 아이디"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "공식 문서: 주문 취소"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

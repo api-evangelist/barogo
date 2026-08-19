@@ -1,0 +1,620 @@
+{
+  "item": [
+    {
+      "id": "ceaa86b4-c5cf-41ca-80bc-603154c61054",
+      "name": "Delivery",
+      "description": {
+        "content": "배달대행사 배달 수행 상태 조회",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e489788e-0dc4-4ccd-b89c-236d9bac9d03",
+          "name": "배달대행사 상태 조회",
+          "request": {
+            "name": "배달대행사 상태 조회",
+            "description": {
+              "content": "공식 문서: 배달대행사 상태 조회",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "delivery-conditions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "orderAgencyId",
+                  "value": "<string>",
+                  "description": "(Required) 주문 제휴사 아이디"
+                },
+                {
+                  "disabled": false,
+                  "key": "orderAgencyStoreId",
+                  "value": "<string>",
+                  "description": "(Required) 주문 제휴사의 상점 아이디"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fe4ad91e-1390-4d9e-9265-76b967e62399",
+              "name": "요청한 작업이 성공했을 때 응답됩니다.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 200,\n  \"data\": [\n    {\n      \"deliveryAgencyId\": \"barogo\",\n      \"deliveryAgencyName\": \"바로고\",\n      \"isDeliveryPossible\": true,\n      \"delayTime\": 10,\n      \"totalExtraCharge\": 500,\n      \"extraCharges\": [\n        {\n          \"dataType\": \"FIXED\",\n          \"type\": \"HOLIDAY\",\n          \"status\": \"ON\",\n          \"charge\": 500\n        },\n        {\n          \"dataType\": \"NONE\",\n          \"type\": \"WEATHER\",\n          \"status\": \"ON\",\n          \"charge\": null\n        }\n      ],\n      \"pickupMinimumAt\": 1674742904640\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8c8bfeb-3231-42f8-a701-02905a0a8e78",
+              "name": "BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2bc7c960-f15c-4b08-aa56-0421a0b6bc78",
+              "name": "UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77c8dd86-5af9-47a0-b72c-121cf170de0f",
+              "name": "NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "92fb9b95-62a6-4b7d-892b-ee494675a08f",
+              "name": "CONFLICT — DUPLICATED_ID / DUPLICATED",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b184fb2-465c-4c51-be74-648500563b6d",
+              "name": "TOO_MANY_REQUESTS — API 요청 횟수 제한 초과",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c37aa8b6-1406-40a1-a878-7b5daebd6953",
+              "name": "INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a8879f2-75e0-4ebb-a8e6-bec8bd3bc4f1",
+              "name": "BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce596aa1-fddd-47de-8af7-0da6e4155878",
+              "name": "SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "236fce9d-a817-41db-aa42-cffe3f590bb4",
+              "name": "GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "delivery-conditions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 5832,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-interlocker.gorelas.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7c752261-4ac6-4ce6-9b40-392b69f8848d",
+    "name": "Barogo Gorela Order Agency Delivery API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer's order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.\n\nThis OpenAPI document was DERIVED by API Evangelist from Barogo's own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.\n\nAuth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.\n\nContact Support:\n Name: Gorela TAM\n Email: tech_poc@barogo.com",
+      "type": "text/plain"
+    }
+  }
+}

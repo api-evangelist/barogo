@@ -1,0 +1,29 @@
+{
+  "provider": "barogo",
+  "sources": [
+    "barogo-areas-api-openapi.yml",
+    "barogo-delivery-api-openapi.yml",
+    "barogo-deposits-api-openapi.yml",
+    "barogo-orders-api-openapi.yml",
+    "barogo-stores-api-openapi.yml"
+  ],
+  "outputs": [
+    "barogo-areas-api-openapi.yml",
+    "barogo-delivery-api-openapi.yml",
+    "barogo-deposits-api-openapi.yml",
+    "barogo-orders-api-openapi.yml",
+    "barogo-stores-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "barogo-areas-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "barogo-delivery-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "barogo-deposits-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "barogo-orders-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "barogo-stores-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

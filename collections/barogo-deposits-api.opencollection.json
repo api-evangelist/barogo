@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Barogo Gorela Order Agency Deposits API",
+    "version": "2026-06-23"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deposits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "상점 예치금 조회",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-interlocker.gorelas.com/api/deposit-infos",
+            "params": [
+              {
+                "name": "orderAgencyId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사 아이디"
+              },
+              {
+                "name": "orderAgencyStoreId",
+                "value": "",
+                "type": "query",
+                "description": "주문 제휴사의 상점 아이디"
+              }
+            ]
+          },
+          "docs": "공식 문서: 상점 예치금 조회"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

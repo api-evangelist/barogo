@@ -20,59 +20,48 @@ server:
   homepage: https://developer.gorelas.com
   runtime: Node.js >= 18
   sdk: '@modelcontextprotocol/sdk ^1.10.2'
-detail: >-
-  This is a first-party MCP server published by Barogo R&D — but it is a DOCUMENTATION server,
-  not an API server. Its single tool fetches markdown pages from
-  https://developer.gorelas.com/api-docs-md/ so an agent in an MCP host can read the Gorela
-  reference while a human writes integration code. It executes no Gorela operation, holds no
-  API key, and cannot place, query or cancel an order. Barogo runs no remote/hosted MCP
-  endpoint; the server runs locally over stdio.
+detail: This is a first-party MCP server published by Barogo R&D — but it is a DOCUMENTATION server, not
+  an API server. Its single tool fetches markdown pages from https://developer.gorelas.com/api-docs-md/
+  so an agent in an MCP host can read the Gorela reference while a human writes integration code. It executes
+  no Gorela operation, holds no API key, and cannot place, query or cancel an order. Barogo runs no remote/hosted
+  MCP endpoint; the server runs locally over stdio.
 tools:
-  - name: fetchGorelaApiDoc
-    description: >-
-      특정 URL 또는 경로에서 고릴라(Gorela) 연동 API 문서를 가져옵니다.
-      Fetches a Gorela integration API document from a path or full URL.
-    input_schema:
-      type: object
-      properties:
-        path:
-          type: string
-          default: index.md
-          description: 문서 경로 (예 index.md) 또는 전체 URL. Paths containing ".." are rejected.
-    backing_service: https://developer.gorelas.com/api-docs-md
-    source_operation: null
+- name: fetchGorelaApiDoc
+  description: 특정 URL 또는 경로에서 고릴라(Gorela) 연동 API 문서를 가져옵니다. Fetches a Gorela integration API document
+    from a path or full URL.
+  input_schema:
+    type: object
+    properties:
+      path:
+        type: string
+        default: index.md
+        description: 문서 경로 (예 index.md) 또는 전체 URL. Paths containing ".." are rejected.
+  backing_service: https://developer.gorelas.com/api-docs-md
+  source_operation: null
 server_rules:
   note: The server ships a static ruleset it hands the model alongside fetched documents.
   rules:
-    - description: API 사용 기본 규칙
-      content: Gorela 연동 주문 제휴사 API는 반드시 공식 문서의 규격을 준수해야 합니다.
-    - description: 인증 관련 규칙
-      content: 모든 API 호출에는 유효한 인증 토큰이 필요하며, 인증 토큰의 관리는 보안 지침을 따라야 합니다.
-    - description: 에러 처리 규칙
-      content: API 응답의 에러 코드를 반드시 확인하고 적절한 오류 처리를 구현해야 합니다.
-    - description: 주문 데이터 규칙
-      content: 주문 데이터 전송 시 필수 필드를 누락하지 않도록 하고, 데이터 형식을 정확히 준수해야 합니다.
-    - description: 개발 환경 규칙
-      content: 개발 및 테스트는 반드시 개발 환경 API를 사용하고, 실 서비스는 프로덕션 환경 API를 사용해야 합니다.
-    - description: 공식 문서 기반 답변 규칙
-      content: fetchGorelaApiDoc 도구로 가져온 공식 문서에 없는 내용은 답변에 포함하지 않습니다.
+  - description: API 사용 기본 규칙
+    content: Gorela 연동 주문 제휴사 API는 반드시 공식 문서의 규격을 준수해야 합니다.
+  - description: 인증 관련 규칙
+    content: 모든 API 호출에는 유효한 인증 토큰이 필요하며, 인증 토큰의 관리는 보안 지침을 따라야 합니다.
+  - description: 에러 처리 규칙
+    content: API 응답의 에러 코드를 반드시 확인하고 적절한 오류 처리를 구현해야 합니다.
+  - description: 주문 데이터 규칙
+    content: 주문 데이터 전송 시 필수 필드를 누락하지 않도록 하고, 데이터 형식을 정확히 준수해야 합니다.
+  - description: 개발 환경 규칙
+    content: 개발 및 테스트는 반드시 개발 환경 API를 사용하고, 실 서비스는 프로덕션 환경 API를 사용해야 합니다.
+  - description: 공식 문서 기반 답변 규칙
+    content: fetchGorelaApiDoc 도구로 가져온 공식 문서에 없는 내용은 답변에 포함하지 않습니다.
 host_config:
-  cursor: |-
-    {
-      "mcpServers": {
-        "gorela-api-docs": {
-          "name": "Gorela Developer Site MCP",
-          "type": "stdio",
-          "command": "npx",
-          "args": ["gorela-developer-mcp-server"]
-        }
-      }
-    }
+  cursor: "{\n  \"mcpServers\": {\n    \"gorela-api-docs\": {\n      \"name\": \"Gorela Developer Site\
+    \ MCP\",\n      \"type\": \"stdio\",\n      \"command\": \"npx\",\n      \"args\": [\"gorela-developer-mcp-server\"\
+    ]\n    }\n  }\n}"
 crosswalk: mcp/barogo-tool-crosswalk.yml
 gaps:
-  - No hosted/remote MCP endpoint — nothing an agent can reach over HTTP.
-  - No tool exposes a Gorela operation, so the 21 REST operations have zero agent surface.
-  - No OAuth-protected-resource or authorization-server metadata (none applies to a stdio doc server).
+- No hosted/remote MCP endpoint — nothing an agent can reach over HTTP.
+- No tool exposes a Gorela operation, so the 21 REST operations have zero agent surface.
+- No OAuth-protected-resource or authorization-server metadata (none applies to a stdio doc server).
 x-evidence:
   fetched: '2026-08-06'
   url: https://registry.npmjs.org/gorela-developer-mcp-server
@@ -80,3 +69,12 @@ x-evidence:
   content_type: application/json
   repo_url: https://api.github.com/repos/BarogoDevelopers/gorela-developer-mcp-server
   repo_http_status: 200
+deployment:
+  mode: none
+  endpoint: https://developer.gorelas.com
+  verified: probed
+  probe: dead
+  note: the endpoint this manifest claimed did not answer; recorded as none rather than deleted so the
+    claim stays auditable
+  checked: '2026-08-12'
+  source: catalog MCP census

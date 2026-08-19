@@ -1,0 +1,620 @@
+{
+  "item": [
+    {
+      "id": "cba4e574-e0e6-4d52-a88d-2b46ded6f94a",
+      "name": "Deposits",
+      "description": {
+        "content": "상점 예치금(Cash, Money) 잔액 조회",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "31c65a74-6dde-4d28-891f-ddce4ae869fb",
+          "name": "상점 예치금 조회",
+          "request": {
+            "name": "상점 예치금 조회",
+            "description": {
+              "content": "공식 문서: 상점 예치금 조회",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "deposit-infos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "orderAgencyId",
+                  "value": "<string>",
+                  "description": "(Required) 주문 제휴사 아이디"
+                },
+                {
+                  "disabled": false,
+                  "key": "orderAgencyStoreId",
+                  "value": "<string>",
+                  "description": "(Required) 주문 제휴사의 상점 아이디"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fccfc95b-e454-4add-a747-26e7b722b974",
+              "name": "요청한 작업이 성공했을 때 응답됩니다.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 200,\n  \"data\": [\n    {\n      \"deliveryAgencyId\": \"barogo\",\n      \"deliveryAgencyName\": \"바로고\",\n      \"deposit\": 95000,\n      \"bank\": \"KB국민은행\",\n      \"accountNumber\": 123123123123123,\n      \"depositor\": \"홍길동\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0adffcfd-0bf0-4b65-9285-6e117b6f6fa5",
+              "name": "BAD_REQUEST — SCHEMA_VALIDATE / NOT_ALLOW / REQUEST_JSON_PARSING / INVALID_INPUT / NONE_DELIVERY_AGENCY_MAPPING / NONE_ORDER_AGENCY_MAPPING",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83f9b202-7cc7-40bb-bb10-f38abebe13c6",
+              "name": "UNAUTHORIZED — EXPIRED_API_KEY / VERIFY_API_KEY_FAIL / ROLE_DENY",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6289af08-1152-4f57-98a3-4848a1fd48e9",
+              "name": "NOT_FOUND — NOT_FOUND_API / NOT_FOUND_RESOURCE / EXTERNAL_NOT_FOUND_RESOURCE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45603598-c9f5-4ce0-a4c2-66b8f3cc1fad",
+              "name": "CONFLICT — DUPLICATED_ID / DUPLICATED",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc23bbf7-5caa-4483-9482-b9f61780306e",
+              "name": "TOO_MANY_REQUESTS — API 요청 횟수 제한 초과",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e451a145-58e3-4abc-88f3-8e702f220810",
+              "name": "INTERNAL_SERVER_ERROR — DB_FAIL / JSON_PARSING / SERVER_ERROR",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e45701a8-83d4-4440-8710-e666ed0aea99",
+              "name": "BAD_GATEWAY — EXTERNAL_SERVER_ERROR / NOT_ALLOW_EXTERNAL / MAINTENANCE_TIME",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02469c5b-1d7a-4640-ae63-5fb6822e8d4a",
+              "name": "SERVICE_UNAVAILABLE — SERVICE_UNAVAILABLE / EXTERNAL_SERVICE_UNAVAILABLE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ffa72b3-881a-4bf4-9378-826519407ba4",
+              "name": "GATEWAY_TIMEOUT — GATEWAY_TIMEOUT / EXTERNAL_SERVER_TIMEOUT",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "deposit-infos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "orderAgencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "orderAgencyStoreId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 6680,\n  \"error\": {\n    \"category\": \"string\",\n    \"errorCode\": \"string\",\n    \"message\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-interlocker.gorelas.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5d927166-9fc1-4fe3-9ca3-3467c7971d0d",
+    "name": "Barogo Gorela Order Agency Deposits API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer's order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.\n\nThis OpenAPI document was DERIVED by API Evangelist from Barogo's own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.\n\nAuth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.\n\nContact Support:\n Name: Gorela TAM\n Email: tech_poc@barogo.com",
+      "type": "text/plain"
+    }
+  }
+}
