@@ -24,6 +24,19 @@ tags:
 - Logistics
 - Last Mile Delivery
 - Food Delivery
+- Couriers
+- Fulfillment
+- Order
+- Webhook
+- South Korea
+- Transportation
+- Marketplace
+tags_raw:
+- Company
+- Delivery
+- Logistics
+- Last Mile Delivery
+- Food Delivery
 - Courier
 - Fulfillment
 - Orders
@@ -97,6 +110,8 @@ apis:
   humanURL: https://developer.gorelas.com/api-doc/request
   baseURL: https://api-interlocker.gorelas.com
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
