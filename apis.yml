@@ -11,6 +11,18 @@ description: >-
   serviceability, order intake in fixed-fare and flexible-fare modes, order read/amend/cancel,
   store mapping, prepaid store balances, delivery-agency status and delivery zones, plus twenty
   callbacks pushed back to the partner as an order fans out into its child deliveries.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.barogo.com/images/common/logo.png
 url: https://raw.githubusercontent.com/api-evangelist/barogo/refs/heads/main/apis.yml
 x-type: company
