@@ -155,6 +155,9 @@ apis:
   - type: Authentication
     url: authentication/barogo-authentication.yml
 common:
+- type: CapabilityMap
+  url: capabilities/barogo-capability-edges.yml
+  name: Barogo Business Capability Map
 - type: Overlay
   url: overlays/barogo-gorela-overlay.yaml
 - type: Website

@@ -1,0 +1,27 @@
+slug: barogo
+provider: Barogo
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Orders
+  spec_file: barogo-orders-api-openapi.yml
+  capability_id: BC-2420.40
+  capability_id_l1: BC-2420
+  capability_name: Last-Mile Delivery Operations Management
+  confidence: 0.7
+  evidence: POST /api/orders  createOrder  주문 접수; POST /api/delivery-possible  checkDeliveryPossible  배달
+    가능 여부 및 요금 조회; PUT /api/orders/{id}/drop-info  updateOrderDropInfo  드랍지 수정
+  reason: 'Core surface of a last-mile delivery brokerage: check serviceability and fee, accept a delivery
+    order, then amend drop location, pickup wish time, contact and payment details. This is last-mile
+    delivery order intake and execution management; some ambiguity remains between last-mile operations
+    and pure booking/reservation management, hence 0.7.'
