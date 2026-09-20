@@ -11,8 +11,20 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 1
+edge_count: 2
 edges:
+- tag: Delivery
+  spec_file: barogo-delivery-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: GET /api/delivery-conditions  getDeliveryAgencyConditions  배달대행사 상태 조회
+  reason: Queries the operating status/conditions of delivery agencies that dispatch riders, within a
+    platform that 'sits between an order agency ... and the delivery agencies that dispatch riders'. That
+    is last-mile transport operations, i.e. logistics operations management. Thin surface (one endpoint)
+    so moderate confidence.
+  recovered_from: vertical-agriculture-food-production-edges.json
 - tag: Orders
   spec_file: barogo-orders-api-openapi.yml
   capability_id: BC-2420.40
