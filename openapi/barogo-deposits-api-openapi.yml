@@ -3,13 +3,7 @@ info:
   title: Barogo Gorela Order Agency Deposits API
   version: '2026-06-23'
   summary: 고릴라(Gorela) 배달대행 중계 플랫폼 — 주문 제휴사(Order Agency) 연동 API
-  description: 'Gorela is the delivery-brokerage platform operated by Barogo (바로고). It sits between an order agency (a POS, marketplace or commerce platform that takes the customer''s order) and the delivery agencies that dispatch riders. One order can fan out to N deliveries.
-
-
-    This OpenAPI document was DERIVED by API Evangelist from Barogo''s own published developer reference at https://developer.gorelas.com/api-docs-md/ (last updated 2026-06-23). Every path, method, parameter name, type, enum value and example is carried over verbatim from those documents. Barogo does not publish an OpenAPI document of its own; this is a faithful transcription, not a provider-published artifact.
-
-
-    Auth: `Authorization: Bearer {API_Key}` — API keys are issued from the 연동 관리 (linkage) console at https://developer.gorelas.com/linkage after partner registration.'
+  description: Gorela is the delivery-brokerage platform operated by Barogo (바로고).
   contact:
     name: Gorela TAM
     email: tech_poc@barogo.com

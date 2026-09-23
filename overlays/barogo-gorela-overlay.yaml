@@ -68,7 +68,7 @@ actions:
   - target: $.paths['/api/flexible/delivery-possible'].post
     description: Same variant handling for the flexible-fare quote.
     update: {}
-known_transcription_notes:
+x-known_transcription_notes:
   - note: >-
       Non-numeric constraints in the docs' Length column (">= actualPayPrice",
       "[ 현재시간 .. 90분 ]", "[ 현재시간으로부터 90분 이후 .. 2개월 이내 ]") cannot be expressed in JSON

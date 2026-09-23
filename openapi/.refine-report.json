@@ -1,11 +1,7 @@
 {
   "provider": "barogo",
   "sources": [
-    "barogo-areas-api-openapi.yml",
-    "barogo-delivery-api-openapi.yml",
-    "barogo-deposits-api-openapi.yml",
-    "barogo-orders-api-openapi.yml",
-    "barogo-stores-api-openapi.yml"
+    "_original/barogo-gorela-openapi.yml"
   ],
   "outputs": [
     "barogo-areas-api-openapi.yml",
@@ -18,12 +14,15 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "barogo-areas-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "barogo-delivery-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "barogo-deposits-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "barogo-orders-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "barogo-stores-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "barogo-gorela-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "barogo-areas-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "barogo-delivery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "barogo-deposits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "barogo-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "barogo-stores-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
