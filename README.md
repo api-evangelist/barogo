@@ -64,5 +64,131 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Barogo is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.hiive.com/securities/barogo-stock
+Barogo (바로고) is a South Korean last-mile delivery platform founded in 2014 and headquartered in Gangnam-gu, Seoul. It operates a nationwide two-wheeler dispatch network for food and goods, with rider, merchant and hub-manager apps and a store POS program, and counts McDonald's, Burger King, KFC, Krispy Kreme, Baskin Robbins and Dunkin among its clients. Its developer-facing product is Gorela (고릴라), a delivery-brokerage platform that sits between an "order agency" — a POS, marketplace or commerce platform that takes the customer's order — and the delivery agencies that assign riders. The Gorela API covers fare quoting and serviceability, order intake in fixed-fare and flexible-fare modes, order read/amend/cancel, store mapping, prepaid store balances, delivery-agency status and delivery zones, plus twenty callbacks pushed back to the partner as an order fans out into its child deliveries.
+
+**Areas:** Company · Delivery · Logistics · Last Mile Delivery · Food Delivery · Couriers · Fulfillment · Order · Webhook · South Korea · Transportation · Marketplace
+
+## Barogo on APIs.io
+
+Everything profiled for Barogo is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/barogo/](https://apis.io/providers/barogo/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [Barogo Areas API](https://apis.io/apis/barogo/barogo-areas-api/) — 상점 배달 권역 / 불가 구역 / 할증 구역 조회
+- [Barogo Delivery API](https://apis.io/apis/barogo/barogo-delivery-api/) — 배달대행사 배달 수행 상태 조회
+- [Barogo Deposits API](https://apis.io/apis/barogo/barogo-deposits-api/) — 상점 예치금(Cash, Money) 잔액 조회
+- [Barogo Orders API](https://apis.io/apis/barogo/barogo-orders-api/) — 주문 접수 / 조회 / 수정 / 취소 및 배달 가능 여부·요금 조회
+- [Barogo Stores API](https://apis.io/apis/barogo/barogo-stores-api/) — 상점 조회 및 주문 제휴사 ↔ 고릴라 상점 매핑
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Barogo Gorela Webhooks](https://apis.io/asyncapis/barogo/barogo-gorela-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [gorela-developer-mcp-server](https://apis.io/servers/barogo/gorela-developer-mcp-server/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Barogo Agentic Access](https://apis.io/agentic-access/barogo/barogo-agentic-access/)
+
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [Barogo Gorela Order Agency Areas API](https://apis.io/collections/barogo/open-barogo-areas-api/)
+- [Barogo Gorela Order Agency Delivery API](https://apis.io/collections/barogo/open-barogo-delivery-api/)
+- [Barogo Gorela Order Agency Deposits API](https://apis.io/collections/barogo/open-barogo-deposits-api/)
+- [Barogo Gorela Callback (Webhook) API](https://apis.io/collections/barogo/open-barogo-gorela-callbacks/)
+- [Barogo Gorela Order Agency Orders API](https://apis.io/collections/barogo/open-barogo-orders-api/)
+- [Barogo Gorela Order Agency Stores API](https://apis.io/collections/barogo/open-barogo-stores-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Barogo Gorela Overlay](https://apis.io/overlays/barogo/barogo-gorela-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Barogo Authentication](https://apis.io/security/barogo/barogo-authentication/)
+- [Barogo Domain Security](https://apis.io/security/barogo/barogo-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.barogo.com/)
+- [Documentation](https://developer.gorelas.com/api-doc/request)
+- [Getting started](https://developer.gorelas.com/api-docs-md/index.md#연동-가이드)
+- [API reference](https://developer.gorelas.com/api-docs-md/index.md)
+- [Sign up](https://developer.gorelas.com/linkage)
+- [Blog](https://m.blog.naver.com/PostList.nhn?blogId=barogo_info)
+- [Terms of service](https://www.barogo.com/policy/delivery)
+- [Privacy policy](https://www.barogo.com/policy/privacy)
+- [GitHub](https://github.com/BarogoDevelopers)
+
+## API Evangelist rating
+
+**Kin Score 37.8** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 67.0 |
+| Contract quality | 65.1 |
+| Contract governance | 4.5 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 39.9 |
+| Access clarity | 21.1 |
+
+**Agent readiness 37.9** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/barogo/](https://apis.io/providers/barogo/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Barogo: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/barogo/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
